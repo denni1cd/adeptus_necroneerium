@@ -36,6 +36,8 @@ Responsible for code topology:
 
 The strategic layer should not produce long prose strategy documents. Its output should usually be a compact repo/file shape or a concrete structural patch.
 
+Strategic work may push back when the requested goal is unclear, contradictory, too broad, or cannot be decomposed into a useful working-code slice.
+
 ### Tactical layer
 
 Responsible for code contracts:
@@ -48,7 +50,9 @@ Responsible for code contracts:
 - test names and test intent,
 - edge cases.
 
-The tactical layer should make implementation easier and safer without overdesigning.
+The tactical layer must satisfy the current strategic milestone: no more and no less. Tactical design should be necessary and sufficient for the milestone, not speculative future-proofing.
+
+The tactical layer should make implementation easier and safer without overdesigning. It may push back when the milestone is insufficient, overbroad, internally inconsistent, or would require unjustified abstractions.
 
 ### Worker layer
 
@@ -63,6 +67,8 @@ Responsible for implementation:
 
 Workers should not silently change public contracts. If a skeleton or contract is wrong, explain the contract change and keep the change local and justified.
 
+Workers may push back when the skeleton or contract cannot be implemented safely with the information provided.
+
 ### Review layer
 
 Responsible for verification:
@@ -73,7 +79,30 @@ Responsible for verification:
 - check for placeholder code,
 - patch clear failures when possible.
 
-Preferred review output is short: PASS, PASS with minor notes, FAIL with specific fixes, or BLOCKED with the missing information.
+Preferred review output is short: PASS, PASS with trivial notes, FAIL with specific fixes, or BLOCKED with the missing information.
+
+All reviews must classify findings as critical or trivial.
+
+Critical findings block a pass. They must be resolved, explicitly downgraded with justification, or escalated as blocked. Examples include failing tests, unmet acceptance criteria, silent public contract drift, data loss risk, placeholder code, implementation that contradicts the tactical contract, tactical contracts that fail the strategic milestone, or structure that prevents the slice from working.
+
+Trivial findings do not block a pass. They may be noted, deferred, or ignored. Examples include naming preferences, minor readability improvements, non-blocking documentation, or optional refactors.
+
+All passes must include short reasoning. A pass should explain why acceptance criteria are satisfied, why no critical findings remain, and what validation evidence supports the result.
+
+## Backward review flow
+
+Review can move backward, but construction should move forward.
+
+On review failure, classify each critical finding by the lowest responsible layer:
+
+- Worker-level failure: implementation bug, missing edge case, placeholder code, failed test, or behavior that does not match the contract.
+- Tactical-level failure: wrong function contract, missing data shape, wrong exception behavior, tests proving the wrong behavior, or over/under-specified skeleton.
+- Strategic-level failure: wrong file/module boundary, wrong dependency direction, wrong entry point, or a topology that prevents the vertical slice from working.
+- Requirement-level failure: ambiguous acceptance criteria, conflicting user goals, missing decision, or external blocker.
+
+Route fixes only as far backward as necessary. Do not restart the full process unless the failure truly requires it.
+
+Maximum autonomous repair attempts after a failed review: two. After the second failed repair attempt, stop, report honest failure, identify the likely failure layer, summarize what was tried, and recommend the next human decision or redesign.
 
 ## Cost discipline
 
