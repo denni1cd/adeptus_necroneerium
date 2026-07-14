@@ -6,6 +6,16 @@ Adeptus Necroneerium explores Layered Agile Coding: a workflow where strategic, 
 
 The project exists to test whether progressive code construction can outperform raw one-shot coding on practical tasks without becoming another token-heavy process.
 
+## Codex skill entrypoint
+
+This repository treats `skills/layered-agile-coding/SKILL.md` as the Codex skill entrypoint for Layered Agile Coding.
+
+Before using a layered workflow, decide whether the task actually meets the skill entry conditions. Direct implementation is preferred for tiny or obvious fixes.
+
+Use the skill when the task involves new modules, public contracts, multiple files, validation logic, meaningful tests, prior implementation drift, unclear module boundaries, or a failed direct coding attempt.
+
+Do not create extra artifacts simply because the skill exists. The skill is a code execution workflow, not a documentation workflow.
+
 ## Primary principle
 
 Working code over comprehensive agent artifacts.
