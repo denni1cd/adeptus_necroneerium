@@ -35,6 +35,17 @@ Every meaningful output should either:
 
 Standalone planning documents, ceremonial logs, and repeated summaries are considered waste unless they directly improve implementation or review.
 
+## Core doctrine
+
+- Working code over artifacts.
+- Each layer may push back when it cannot safely complete its responsibility with what was provided.
+- Tactical scope is milestone-bound: no more and no less.
+- Review moves backward only as far as necessary.
+- Critical findings must be resolved, downgraded with justification, or escalated.
+- Trivial findings must not block working code.
+- Autonomous repair loops are capped.
+- Passes require short evidence-based reasoning.
+
 ## Layer responsibilities
 
 ### Strategic layer
@@ -60,6 +71,8 @@ It should avoid:
 
 Its output should look like a codebase taking shape.
 
+The strategic layer may push back if the requested goal is unclear, contradictory, too broad, or cannot be decomposed into a useful working-code slice.
+
 ### Tactical layer
 
 The tactical layer works at interface and contract level.
@@ -80,9 +93,15 @@ It should avoid:
 - full implementation,
 - redundant planning summaries,
 - unrelated refactors,
-- changing strategic structure without noting why.
+- changing strategic structure without noting why,
+- speculative future-proofing,
+- abstractions not required by the current milestone.
 
 Its output should make implementation easier and safer.
+
+Tactical designs must satisfy the current strategic milestone, no more and no less. A tactical design is good when it is necessary and sufficient for the milestone as working code.
+
+The tactical layer may push back if the milestone is insufficient, overbroad, internally inconsistent, or would require unjustified abstractions.
 
 ### Worker layer
 
@@ -106,6 +125,8 @@ It should avoid:
 
 If the worker discovers the skeleton is wrong, it should request or explain a contract change rather than drifting silently.
 
+The worker layer may push back if the skeleton or contract cannot be implemented safely with the information provided.
+
 ### Review layer
 
 The review layer verifies working behavior.
@@ -124,9 +145,41 @@ The review output should be short unless there is a real issue.
 Preferred review outcomes:
 
 - PASS
-- PASS with minor notes
+- PASS with trivial notes
 - FAIL with specific patch/fix required
 - BLOCKED with specific missing information
+
+All review findings must be categorized as critical or trivial.
+
+Critical findings block a pass. A critical finding must be resolved by patch, downgraded with justification, or escalated as blocked. Critical examples include failing tests, unmet acceptance criteria, silent public contract drift, data loss risk, security/safety issue, placeholder code, implementation that contradicts tactical contract, tactical contract that fails the strategic milestone, or strategic topology that prevents the vertical slice from working.
+
+Trivial findings do not block a pass. Trivial examples include naming preferences, minor style/readability improvements, optional refactors, or non-blocking documentation improvements.
+
+All passes must be justified with short reasoning. A pass should state why acceptance criteria are satisfied, why no critical findings remain, and what validation evidence supports the result.
+
+## Backward review flow
+
+Review can move backward, but construction should move forward.
+
+When review fails, it should identify the lowest responsible layer for each critical finding:
+
+- Worker-level failure: bug in implementation, missing edge case, failed test, placeholder code, or behavior that does not match the contract.
+- Tactical-level failure: wrong function contract, missing data shape, wrong exception behavior, tests proving the wrong behavior, or an over/under-specified skeleton.
+- Strategic-level failure: wrong file/module boundary, wrong dependency direction, wrong public entry point, or a topology that prevents the vertical slice from working.
+- Requirement-level failure: ambiguous acceptance criteria, conflicting user goals, missing decision, or external blocker.
+
+Route the fix only as far backward as necessary. Do not restart the full chain unless the failure actually requires it.
+
+Maximum autonomous repair attempts after a failed review: two.
+
+After the second failed repair attempt:
+
+- stop,
+- do not continue patching,
+- report honest failure,
+- identify the likely failure layer,
+- summarize what was tried,
+- recommend the next human decision or redesign.
 
 ## Cost philosophy
 
@@ -181,6 +234,8 @@ The preferred rhythm is:
 8. Can a local model help with low-risk skeleton drafting without hurting quality?
 9. When is up-to-date/cloud-model knowledge actually needed?
 10. How do we compare this against raw Codex fairly?
+11. What evidence is enough to downgrade a review finding from critical to trivial?
+12. What task classes are best suited for layered coding versus direct coding?
 
 ## Success criteria
 
