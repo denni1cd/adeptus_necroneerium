@@ -6,6 +6,8 @@ Adeptus Necroneerium explores Layered Agile Coding: a workflow where strategic, 
 
 The project exists to test whether progressive code construction can outperform raw one-shot coding on practical tasks without becoming another token-heavy process.
 
+This is not a council or debate project. It is a Codex coding skill focused on getting from request to working, validated code.
+
 ## Codex skill entrypoint
 
 This repository treats `skills/layered-agile-coding/SKILL.md` as the Codex skill entrypoint for Layered Agile Coding.
@@ -15,6 +17,23 @@ Before using a layered workflow, decide whether the task actually meets the skil
 Use the skill when the task involves new modules, public contracts, multiple files, validation logic, meaningful tests, prior implementation drift, unclear module boundaries, or a failed direct coding attempt.
 
 Do not create extra artifacts simply because the skill exists. The skill is a code execution workflow, not a documentation workflow.
+
+## Named roles
+
+The project uses lightweight necromantic role names to make the layers memorable:
+
+- **Lich** = Strategic topology
+- **Vampire** = Tactical contracts
+- **Skeleton** = Worker implementation
+- **Shade** = Review and backward routing
+
+These names are responsibility labels, not a reason to create separate agent contexts or perform roleplay. Use them to clarify which layer owns a decision.
+
+## Spec template
+
+Use `skills/layered-agile-coding/templates/spec.md` only when a lightweight spec will reduce ambiguity for Tactical or Layered mode work.
+
+Skip the spec for Direct mode tasks where it would become process waste.
 
 ## Primary principle
 
@@ -34,7 +53,7 @@ Avoid ceremonial planning, repeated restatement, long implementation reports, an
 
 Use the layer model only when it helps produce working code.
 
-### Strategic layer
+### Lich: Strategic topology
 
 Responsible for code topology:
 
@@ -44,11 +63,11 @@ Responsible for code topology:
 - public entry points,
 - major data flow.
 
-The strategic layer should not produce long prose strategy documents. Its output should usually be a compact repo/file shape or a concrete structural patch.
+The Lich should not produce long prose strategy documents. Its output should usually be a compact repo/file shape or a concrete structural patch.
 
-Strategic work may push back when the requested goal is unclear, contradictory, too broad, or cannot be decomposed into a useful working-code slice.
+The Lich may push back when the requested goal is unclear, contradictory, too broad, or cannot be decomposed into a useful working-code slice.
 
-### Tactical layer
+### Vampire: Tactical contracts
 
 Responsible for code contracts:
 
@@ -60,11 +79,11 @@ Responsible for code contracts:
 - test names and test intent,
 - edge cases.
 
-The tactical layer must satisfy the current strategic milestone: no more and no less. Tactical design should be necessary and sufficient for the milestone, not speculative future-proofing.
+The Vampire must satisfy the current strategic milestone: no more and no less. Tactical design should be necessary and sufficient for the milestone, not speculative future-proofing.
 
-The tactical layer should make implementation easier and safer without overdesigning. It may push back when the milestone is insufficient, overbroad, internally inconsistent, or would require unjustified abstractions.
+The Vampire should make implementation easier and safer without overdesigning. It may push back when the milestone is insufficient, overbroad, internally inconsistent, or would require unjustified abstractions.
 
-### Worker layer
+### Skeleton: Worker implementation
 
 Responsible for implementation:
 
@@ -75,11 +94,11 @@ Responsible for implementation:
 - run validation,
 - patch failures.
 
-Workers should not silently change public contracts. If a skeleton or contract is wrong, explain the contract change and keep the change local and justified.
+The Skeleton should not silently change public contracts. If a skeleton or contract is wrong, explain the contract change and keep the change local and justified.
 
-Workers may push back when the skeleton or contract cannot be implemented safely with the information provided.
+The Skeleton may push back when the skeleton or contract cannot be implemented safely with the information provided.
 
-### Review layer
+### Shade: Review and backward routing
 
 Responsible for verification:
 
@@ -103,11 +122,11 @@ All passes must include short reasoning. A pass should explain why acceptance cr
 
 Review can move backward, but construction should move forward.
 
-On review failure, classify each critical finding by the lowest responsible layer:
+On Shade review failure, classify each critical finding by the lowest responsible layer:
 
-- Worker-level failure: implementation bug, missing edge case, placeholder code, failed test, or behavior that does not match the contract.
-- Tactical-level failure: wrong function contract, missing data shape, wrong exception behavior, tests proving the wrong behavior, or over/under-specified skeleton.
-- Strategic-level failure: wrong file/module boundary, wrong dependency direction, wrong entry point, or a topology that prevents the vertical slice from working.
+- Skeleton-level failure: implementation bug, missing edge case, placeholder code, failed test, or behavior that does not match the contract.
+- Vampire-level failure: wrong function contract, missing data shape, wrong exception behavior, tests proving the wrong behavior, or over/under-specified skeleton.
+- Lich-level failure: wrong file/module boundary, wrong dependency direction, wrong entry point, or a topology that prevents the vertical slice from working.
 - Requirement-level failure: ambiguous acceptance criteria, conflicting user goals, missing decision, or external blocker.
 
 Route fixes only as far backward as necessary. Do not restart the full process unless the failure truly requires it.
