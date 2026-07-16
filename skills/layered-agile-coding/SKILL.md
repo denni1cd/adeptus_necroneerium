@@ -1,6 +1,6 @@
 ---
 name: layered-agile-coding
-description: Use for Codex coding tasks where direct one-shot implementation is likely to drift but heavy planning would waste tokens. Applies strategic topology, tactical contracts, worker implementation, and backward review only as needed to reach working, validated code.
+description: Use for Codex coding tasks where direct one-shot implementation is likely to drift but heavy planning would waste tokens. Applies Lich strategic topology, Vampire tactical contracts, Skeleton implementation, and Shade backward review only as needed to reach working, validated code.
 ---
 
 # Layered Agile Coding
@@ -9,7 +9,7 @@ description: Use for Codex coding tasks where direct one-shot implementation is 
 
 Produce working, tested code with the least useful process overhead.
 
-This is a Codex skill for code execution. It is not a separate agent framework by default. Use it to choose the lightest path from request to working validated code.
+This is a Codex skill for code execution. It is not a council, debate system, or separate agent framework by default. Use it to choose the lightest path from request to working validated code.
 
 ## Prime directive
 
@@ -24,6 +24,33 @@ Every meaningful output must either:
 - or identify a blocker that prevents code from proceeding.
 
 Do not create standalone planning artifacts, long summaries, or ceremonial reports unless they directly improve implementation or review.
+
+## Role names
+
+The skill uses lightweight named roles to make responsibilities memorable. The names are labels for execution responsibilities, not separate personalities or mandatory separate agent calls.
+
+- **Lich**: strategic topology. Shapes repository/module structure for the next working slice.
+- **Vampire**: tactical contracts. Extracts only the contracts, skeletons, and tests needed to satisfy the milestone.
+- **Skeleton**: worker implementation. Fills in behavior, tests, wiring, and focused repairs.
+- **Shade**: review and backward routing. Verifies behavior, classifies findings, and routes failures only as far backward as necessary.
+
+Do not create a new context or agent call merely because a role has a name. Role separation is conceptual unless the task genuinely benefits from an explicit handoff.
+
+## Spec template
+
+For non-trivial work, use `skills/layered-agile-coding/templates/spec.md` as the lightweight spec format.
+
+The spec is optional. Use it when it will reduce ambiguity for a Tactical or Layered task. Skip it for Direct mode tasks where it would become process waste.
+
+A spec should be treated as a working-code guide, not a planning artifact. It should capture:
+
+- acceptance criteria,
+- selected mode,
+- current milestone,
+- strategic topology if needed,
+- tactical contracts if needed,
+- validation plan,
+- review route and repair attempt count.
 
 ## Mode selection
 
@@ -44,25 +71,25 @@ Use for tiny or obvious changes.
 Use when the file structure is obvious but contracts matter.
 
 1. Identify the milestone or acceptance criteria.
-2. Draft the minimal function/class/data/test skeleton required by that milestone.
-3. Implement the skeleton.
+2. Have the Vampire draft the minimal function/class/data/test skeleton required by that milestone.
+3. Have the Skeleton implement the skeleton.
 4. Run validation.
-5. Review findings as critical or trivial.
+5. Have the Shade review findings as critical or trivial.
 
 ### Layered mode
 
 Use when the change affects repo structure, multiple files, public interfaces, or validation logic.
 
-1. Strategic topology: create or revise the minimal file/module structure needed for the next vertical slice.
-2. Tactical skeleton: define the necessary signatures, data contracts, docstrings, exceptions, and tests for the current milestone.
-3. Worker implementation: fill behavior, complete tests, wire modules, and patch failures.
-4. Review: validate behavior, classify findings, and route unresolved issues backward only as far as necessary.
+1. **Lich strategic topology**: create or revise the minimal file/module structure needed for the next vertical slice.
+2. **Vampire tactical skeleton**: define the necessary signatures, data contracts, docstrings, exceptions, and tests for the current milestone.
+3. **Skeleton worker implementation**: fill behavior, complete tests, wire modules, and patch failures.
+4. **Shade review**: validate behavior, classify findings, and route unresolved issues backward only as far as necessary.
 
-Skip strategic topology if the structure is already obvious. Skip tactical skeletons if the implementation shape is obvious.
+Skip Lich topology if the structure is already obvious. Skip Vampire skeletons if the implementation shape is obvious.
 
 ## Layer responsibilities
 
-### Strategic layer: code topology
+### Lich: strategic code topology
 
 Purpose: shape the repository/module structure needed for the next working vertical slice.
 
@@ -84,7 +111,7 @@ Avoid:
 
 Push back if the request is unclear, contradictory, too broad, or cannot be decomposed into a useful working-code slice.
 
-### Tactical layer: contracts and skeletons
+### Vampire: tactical contracts and skeletons
 
 Purpose: create the minimum sufficient contracts required to satisfy the strategic milestone.
 
@@ -110,7 +137,7 @@ Avoid:
 
 Push back if the milestone is insufficient, overbroad, internally inconsistent, or would require unjustified abstractions.
 
-### Worker layer: implementation
+### Skeleton: worker implementation
 
 Purpose: produce working behavior.
 
@@ -134,7 +161,7 @@ If the approved skeleton or contract is wrong, make the contract change explicit
 
 Push back if the contract cannot be implemented safely with the information provided.
 
-### Review layer: verification and routing
+### Shade: review and backward routing
 
 Purpose: verify code against acceptance criteria and contracts.
 
@@ -159,11 +186,11 @@ All passes require short reasoning and validation evidence.
 
 Review can move backward, but construction should move forward.
 
-When review fails, identify the lowest responsible layer for each critical finding:
+When Shade review fails, identify the lowest responsible layer for each critical finding:
 
-- Worker: implementation bug, failed test, placeholder code, missing edge case, behavior contradicts contract.
-- Tactical: wrong function contract, missing data shape, wrong exception behavior, tests prove the wrong behavior, skeleton is over/under-specified.
-- Strategic: wrong file/module boundary, wrong dependency direction, wrong public entry point, topology prevents the vertical slice from working.
+- Skeleton: implementation bug, failed test, placeholder code, missing edge case, behavior contradicts contract.
+- Vampire: wrong function contract, missing data shape, wrong exception behavior, tests prove the wrong behavior, skeleton is over/under-specified.
+- Lich: wrong file/module boundary, wrong dependency direction, wrong public entry point, topology prevents the vertical slice from working.
 - Requirement/User: ambiguous acceptance criteria, conflicting goals, missing decision, external blocker.
 
 Route fixes only as far backward as necessary. Do not restart the full chain unless the failure actually requires it.
@@ -215,18 +242,20 @@ Include:
 
 1. Determine Direct, Tactical, or Layered mode.
 2. Inspect only needed context.
-3. Produce code-adjacent structure only when it helps implementation.
-4. Implement working code and tests.
-5. Run validation.
-6. Review critical/trivial findings.
-7. Patch at most two failed review attempts.
-8. Pass with evidence or block honestly.
+3. Use the spec template only if it helps implementation or review.
+4. Produce code-adjacent structure only when it helps implementation.
+5. Implement working code and tests.
+6. Run validation.
+7. Review critical/trivial findings.
+8. Patch at most two failed review attempts.
+9. Pass with evidence or block honestly.
 
 ## Anti-patterns
 
 Do not:
 
 - create a new agent or full setup context per function,
+- treat named roles as a council or debate system,
 - generate long planning documents before code,
 - write implementation reports that no later step uses,
 - perform review theater,
