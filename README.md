@@ -37,6 +37,20 @@ Concept and design exploration.
 
 This is not currently an Adeptus Engineerium replacement. It is a separate project for exploring whether layered code construction can produce better cost/benefit than raw one-shot coding for some classes of software tasks.
 
+## Spec validator
+
+Install the project locally, then validate a Layered Agile Coding spec:
+
+```console
+python -m pip install -e .
+necroneerium-spec path/to/spec.md
+```
+
+The command prints `PASS` and exits with status 0 when every required section is
+present and non-empty. Otherwise it prints `FAIL`, identifies missing or empty
+sections, and exits with status 1. It can also be run as
+`python -m adeptus_necroneerium path/to/spec.md`.
+
 ## Project shape
 
 The project is intentionally lightweight at the start:
