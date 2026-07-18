@@ -22,9 +22,13 @@ Every meaningful output must either:
 - become an executable validation step,
 - or identify a blocker that prevents code from proceeding.
 
-## Entry conditions
+## Invocation boundary
 
-Use this skill when the task involves at least one of:
+This skill is strictly opt-in. Use it only when the user explicitly requests Adeptus Necroneerium by name, writes `adeptus_necroneerium`, or invokes `@adeptus-necroneerium`.
+
+Never infer invocation from task complexity, file count, ambiguity, prior drift, or a failed direct attempt. Without an explicit request, use the ordinary Codex workflow.
+
+After explicit invocation, the following traits help choose Tactical or Adeptus mode:
 
 - new modules or files,
 - public function/class/data contracts,
@@ -35,7 +39,7 @@ Use this skill when the task involves at least one of:
 - unclear module boundaries,
 - a failed direct coding attempt.
 
-Skip this skill for tiny obvious fixes, pure documentation edits, simple config changes, or mechanical edits where direct implementation is the shortest safe path.
+Choose Direct mode within the invoked skill for tiny obvious fixes, pure documentation edits, simple config changes, or mechanical edits where direct implementation is the shortest safe path.
 
 ## Workflow modes
 

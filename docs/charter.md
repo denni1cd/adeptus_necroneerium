@@ -37,6 +37,7 @@ Standalone planning documents, ceremonial logs, and repeated summaries are consi
 
 ## Core doctrine
 
+- Adeptus Necroneerium is strictly on demand and must never be selected implicitly.
 - Working code over artifacts.
 - Each layer may push back when it cannot safely complete its responsibility with what was provided.
 - Tactical scope is milestone-bound: no more and no less.

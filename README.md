@@ -2,6 +2,8 @@
 
 Adeptus Necroneerium is a coding workflow where each responsibility layer contributes directly to working software instead of producing piles of planning artifacts.
 
+The skill is strictly on demand. Codex must use it only when the user explicitly requests Adeptus Necroneerium or invokes `@adeptus-necroneerium`; it must not activate automatically for ordinary coding work.
+
 The name is a nod to Adeptus Engineerium and to the project’s core metaphor: start with the skeleton, then fill in the gaps.
 
 ## Core idea

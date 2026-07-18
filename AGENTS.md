@@ -12,9 +12,9 @@ This is not a council or debate project. It is a Codex coding skill focused on g
 
 This repository treats `skills/adeptus-necroneerium/SKILL.md` as the Codex skill entrypoint for Adeptus Necroneerium. The repository and prompt alias is `adeptus_necroneerium`; the registered skill name is `adeptus-necroneerium` because Codex skill names require hyphen-case.
 
-Before using the Adeptus workflow, decide whether the task actually meets the skill entry conditions. Direct implementation is preferred for tiny or obvious fixes.
+This skill is strictly on demand. Never invoke it automatically from task complexity, file count, ambiguity, implementation drift, or a failed direct coding attempt. Use it only when the user explicitly requests Adeptus Necroneerium by name, writes `adeptus_necroneerium`, or invokes `@adeptus-necroneerium`.
 
-Use the skill when the task involves new modules, public contracts, multiple files, validation logic, meaningful tests, prior implementation drift, unclear module boundaries, or a failed direct coding attempt.
+After explicit invocation, choose the lightest safe mode. Direct implementation remains appropriate for tiny or obvious fixes even inside an Adeptus Necroneerium run.
 
 Do not create extra artifacts simply because the skill exists. The skill is a code execution workflow, not a documentation workflow.
 
@@ -162,7 +162,7 @@ Do not build a huge abstract skeleton before proving any behavior works.
 
 Skip the Adeptus process for tiny fixes. Use direct implementation when the shape is obvious.
 
-Escalate to the Adeptus workflow when the task involves new modules, public contracts, multiple files, validation logic, or previous implementation drift.
+Without explicit user invocation, do not escalate into the Adeptus workflow. After invocation, task complexity may determine which mode to use, but it is never itself a trigger.
 
 ## Current project status
 

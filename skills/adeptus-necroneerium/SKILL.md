@@ -1,6 +1,6 @@
 ---
 name: adeptus-necroneerium
-description: Use when the user requests adeptus_necroneerium, Adeptus Necroneerium, or @adeptus-necroneerium, and for Codex coding tasks where direct one-shot implementation is likely to drift but heavy planning would waste tokens. Applies Lich strategic topology, Vampire tactical contracts, Skeleton implementation, and Shade backward review only as needed to reach working, validated code.
+description: Strictly on-demand coding execution workflow. Use only when the user explicitly requests Adeptus Necroneerium by name, writes adeptus_necroneerium, or invokes @adeptus-necroneerium. Never invoke implicitly for ordinary coding tasks. Applies Lich strategic topology, Vampire tactical contracts, Skeleton implementation, and Shade backward review only as needed to reach working, validated code.
 ---
 
 # Adeptus Necroneerium
@@ -10,6 +10,12 @@ description: Use when the user requests adeptus_necroneerium, Adeptus Necroneeri
 Produce working, tested code with the least useful process overhead.
 
 This is a Codex skill for code execution. It is not a council, debate system, or separate agent framework by default. Use it to choose the lightest path from request to working validated code.
+
+## Invocation boundary
+
+This skill is strictly opt-in. Run it only when the user explicitly requests Adeptus Necroneerium by name, writes `adeptus_necroneerium`, or invokes `@adeptus-necroneerium`.
+
+Never self-invoke based on task complexity, file count, ambiguity, prior implementation drift, a failed direct attempt, or any other task characteristic. Those traits may affect mode selection only after explicit invocation.
 
 ## Prime directive
 
