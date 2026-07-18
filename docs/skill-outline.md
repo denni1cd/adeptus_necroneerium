@@ -176,16 +176,18 @@ Review failure must route to the lowest responsible layer.
 
 Do not restart the full chain unless the failure requires it.
 
-Assign each critical finding a stable identity and its own retry counter. The initial construction and first rejection are not retries. Each finding receives retry 1 and retry 2. Rewording, rerouting, or discovering another symptom of the same root defect does not reset the counter; unrelated findings have independent counters.
+Responsibility scopes may branch. One Strategic/Lich scope may govern many Tactical/Vampire scopes, and one Tactical/Vampire scope may govern many downstream Worker/Skeleton and Review/Shade items. Assign each finding a scope path, stable identity, judged item, and isolated retry counter. Siblings never share counters.
+
+Initial construction is attempt 0. The first rejection immediately triggers retry 1. Rejection of retry 1 immediately triggers retry 2. Rejection of retry 2 terminates the entire project. Rewording, rerouting, or discovering another symptom of the same root defect does not reset the counter.
 
 Rerun from the responsible layer forward:
 
 - Worker finding: Worker, then Review.
-- Tactical finding: Tactical, then Worker, then Review.
-- Strategic finding: Strategic, then Tactical, then Worker, then Review.
+- Tactical finding: Tactical, then affected Worker and Review descendants.
+- Strategic finding: Strategic, then affected Tactical, Worker, and Review descendants.
 - Requirement/User finding: BLOCKED without consuming implementation retries.
 
-If the same finding remains after retry 2, terminate the entire project as FAIL and report its full attempt history.
+Rerun only the affected descendant branch; sibling scopes retain their state and counters. If the same finding remains after retry 2, terminate the entire project as FAIL and report its scope path and full attempt history.
 
 ## Review output format
 
@@ -206,11 +208,12 @@ Use when a critical finding is fixable within the current layer or a lower backw
 Include:
 
 - stable finding ID,
+- parent scope and judged item,
 - critical finding,
 - responsible layer,
 - required fix,
 - next retry number, 1 or 2,
-- downstream layers that must rerun.
+- affected descendant branch that must rerun.
 
 A same-finding failure after retry 2 is terminal FAIL for the entire project.
 

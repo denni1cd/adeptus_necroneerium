@@ -203,23 +203,26 @@ Route fixes only as far backward as necessary. Do not restart the full chain unl
 
 ### Finding identity and isolated retry budgets
 
-Shade must assign each critical finding a stable finding ID tied to the judged item, acceptance criterion, contract, or observable defect. Rewording the finding, discovering another symptom of the same root defect, or rerouting it to the correct layer does not create a new finding or reset its counter.
+Responsibility scopes may branch. One Lich scope may govern many Vampire scopes. One Vampire scope may govern many downstream Skeleton implementation items and Shade judgments. Do not flatten a parent and all of its children into one work item or retry counter.
 
-The initial construction and first Shade rejection are not retries. That rejection opens the finding with two autonomous retries available.
+Shade must assign each critical finding a scope path, stable finding ID, and judged item tied to an acceptance criterion, contract, or observable defect. Rewording the finding, discovering another symptom of the same root defect, or rerouting it to the correct layer does not create a new finding or reset its counter.
+
+Initial construction is attempt 0. The first Shade rejection immediately triggers retry 1. If Shade rejects retry 1 for the same finding, that rejection immediately triggers retry 2. If Shade rejects retry 2 for the same finding, stop the entire project immediately with terminal FAIL.
 
 Retry budgets are isolated per finding:
 
-- Retry 1 routes the finding to its responsible layer, reruns every affected downstream layer, and returns to Shade.
-- Retry 2 does the same only if Shade rejects the same finding again.
+- Retry 1 is triggered by the first rejection, routes the finding to its responsible layer, reruns the affected descendant branch, and returns to Shade.
+- Retry 2 is triggered by rejection of retry 1 and reruns that affected branch one final time.
 - If Shade rejects that same finding after retry 2, stop the entire project immediately and report terminal FAIL.
 - A different critical finding receives its own stable ID and its own two-retry budget.
+- Sibling scopes and findings retain their state and independent counters.
 - A test-suite run, review cycle, milestone, phase, or project does not share one aggregate retry counter.
 
 Route and rerun from the responsible layer forward:
 
 - Skeleton finding: Skeleton repairs the implementation, then Shade reviews it.
-- Vampire finding: Vampire repairs the contract, skeleton, or test; Skeleton reruns the affected implementation and validation; then Shade reviews it.
-- Lich finding: Lich repairs the topology; Vampire rebuilds affected contracts and tests; Skeleton reruns affected implementation and validation; then Shade reviews it.
+- Vampire finding: Vampire repairs the contract, skeleton, or test; affected Skeleton and Shade descendants rerun; unrelated sibling branches do not.
+- Lich finding: Lich repairs the topology; affected Vampire, Skeleton, and Shade descendants rerun; unrelated sibling branches do not.
 - Requirement/User finding: stop as BLOCKED until the missing decision or dependency is supplied. Do not consume implementation retries while blocked.
 
 Upstream failures are therefore intentionally more expensive because all affected downstream work must be rerun.
@@ -243,11 +246,12 @@ Use when a critical finding is fixable within the current layer or a lower backw
 Include:
 
 - stable finding ID,
+- scope path and judged item,
 - critical finding,
 - responsible layer,
 - required fix,
 - next retry number, 1 or 2,
-- downstream layers that must rerun.
+- affected descendant branch that must rerun.
 
 After retry 2 fails for the same finding, use terminal FAIL for the entire project and include the full attempt history.
 

@@ -53,4 +53,4 @@ Do not hand off tactical commentary that does not affect code.
 
 ## Routed retry
 
-When Shade routes a finding to Vampire, repair only the contract, skeleton, test intent, or edge case implicated by that stable finding ID. Preserve the finding's retry count, then rerun Skeleton for all affected implementation and validation before returning to Shade.
+One Vampire scope may govern many downstream Skeleton implementation items and Shade judgments. When Shade routes a finding to Vampire, repair only the contract, skeleton, test intent, or edge case implicated by that scope path and stable finding ID. Preserve the finding's retry count, then rerun only affected Skeleton and Shade descendants. Do not rerun unrelated sibling items.

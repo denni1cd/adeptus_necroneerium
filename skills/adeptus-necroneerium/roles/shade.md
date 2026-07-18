@@ -56,24 +56,25 @@ Route each critical finding to the lowest responsible layer:
 
 ## Finding identity
 
-Assign every critical finding a stable finding ID tied to the judged item, acceptance criterion, contract, or observable defect. Keep that ID when the wording changes, another symptom of the same root defect appears, or the responsible layer is corrected.
+Record the finding's parent scope, judged item, and stable finding ID tied to the acceptance criterion, contract, or observable defect. Keep that identity when the wording changes, another symptom of the same root defect appears, or the responsible layer is corrected.
 
-Do not combine unrelated findings into one repair counter. Do not reset a counter by renaming or rerouting the same finding.
+Scopes may branch: one Lich scope may govern many Vampire scopes, and one Vampire scope may govern many downstream Skeleton and Shade items. Do not combine parents, children, siblings, or unrelated findings into one repair counter. Do not reset a counter by renaming or rerouting the same finding.
 
 ## Isolated retry limit
 
-The initial construction and first rejection are not retries. Each finding receives two autonomous retries after its initial rejection.
+Initial construction is attempt 0. The first rejection immediately triggers retry 1. Rejection of retry 1 immediately triggers retry 2.
 
-- Retry 1 routes to the responsible layer and reruns all affected downstream layers before Shade reviews again.
-- Retry 2 repeats that route only if the same finding remains.
+- Retry 1 is triggered by the first rejection and reruns the affected descendant branch before Shade reviews again.
+- Retry 2 is triggered by rejection of retry 1 and reruns that affected branch one final time.
 - If the same finding remains after retry 2, stop the entire project immediately with terminal FAIL.
 - A different finding starts its own two-retry budget.
+- Sibling scopes retain their state and independent counters.
 
 Required downstream reruns:
 
 - Skeleton finding: Skeleton, then Shade.
-- Vampire finding: Vampire, then Skeleton, then Shade.
-- Lich finding: Lich, then Vampire, then Skeleton, then Shade.
+- Vampire finding: Vampire, then affected Skeleton and Shade descendants.
+- Lich finding: Lich, then affected Vampire, Skeleton, and Shade descendants.
 - Requirement/User finding: BLOCKED without consuming a retry until the missing input is supplied.
 
 ## Output formats
@@ -84,7 +85,7 @@ Include short reasoning, validation evidence, and any trivial notes.
 
 ### FAIL
 
-For a routed repair, include stable finding ID, critical finding, responsible layer, required fix, next retry number, and downstream layers to rerun.
+For a routed repair, include scope path, stable finding ID, judged item, critical finding, responsible layer, triggered retry number, and affected descendant branch to rerun.
 
 For terminal project failure, include the finding ID, responsible layer, initial failure, retry 1 result, retry 2 result, and unresolved defect.
 

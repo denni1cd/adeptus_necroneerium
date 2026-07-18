@@ -50,4 +50,4 @@ Do not produce a long implementation report unless a failure needs explanation.
 
 ## Routed retry
 
-When Shade routes a finding to Skeleton, repair only the implementation implicated by that stable finding ID, preserve its retry count, rerun the affected validation, and return the result to Shade.
+When Shade routes a finding to Skeleton, repair only the implementation implicated by that scope path and stable finding ID, preserve its retry count, rerun the affected validation and Shade judgment, and leave sibling work items unchanged.

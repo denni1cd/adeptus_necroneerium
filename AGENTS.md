@@ -131,9 +131,9 @@ On Shade review failure, classify each critical finding by the lowest responsibl
 
 Route fixes only as far backward as necessary. Do not restart the full process unless the failure truly requires it.
 
-Assign each critical finding a stable ID and an isolated retry counter. The initial construction and first rejection are not retries. The responsible layer receives retry 1 and, if the same finding remains, retry 2. Rewording, rerouting, or finding another symptom of the same root defect does not reset the counter. Unrelated findings receive independent counters.
+Assign each critical finding a stable ID, parent scope, judged item, and isolated retry counter. Initial construction is attempt 0. The first rejection immediately triggers retry 1; rejection of retry 1 immediately triggers retry 2; rejection of retry 2 stops the entire project with terminal FAIL. Rewording, rerouting, or finding another symptom of the same root defect does not reset the counter.
 
-Rerun from the responsible layer forward: Skeleton then Shade; Vampire then Skeleton then Shade; or Lich then Vampire then Skeleton then Shade. If the same finding remains after retry 2, stop the entire project with terminal FAIL. Requirement or external-dependency findings are BLOCKED without consuming implementation retries.
+Scopes are hierarchical and may branch: one Lich scope may govern many Vampire scopes, and one Vampire scope may govern many downstream implementation and Shade-review items. Sibling items have independent counters. Rerun only the affected branch from the responsible layer forward: Skeleton then Shade; Vampire then affected Skeleton and Shade descendants; or Lich then affected Vampire, Skeleton, and Shade descendants. Requirement or external-dependency findings are BLOCKED without consuming implementation retries.
 
 ## Cost discipline
 

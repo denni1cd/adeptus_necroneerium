@@ -19,6 +19,12 @@ Adeptus Necroneerium shifts that model:
 
 The goal is not more ceremony. The goal is **working code with less waste**.
 
+## Nested responsibility scopes
+
+Responsibility scopes may branch. One Lich scope may govern many Vampire scopes, and one Vampire scope may govern many downstream implementation and Shade-review items. Review retries attach to the specific judged item within that hierarchy, never to an entire parent scope or a shared project-wide pool.
+
+The first rejection of an item triggers retry 1. If that retry is rejected, retry 2 is the final repair chance. A rejection after retry 2 fails the entire project. An upstream retry reruns only the affected descendant branch; sibling scopes retain their own state and retry counters.
+
 ## Guiding principle
 
 > Working code over comprehensive agent artifacts.

@@ -50,4 +50,4 @@ Do not hand off unrelated strategic reasoning.
 
 ## Routed retry
 
-When Shade routes a finding to Lich, repair only the topology implicated by that stable finding ID. Preserve the finding's retry count, then rerun Vampire for affected contracts and tests, Skeleton for affected implementation and validation, and Shade for review.
+One Lich scope may govern many Vampire scopes. When Shade routes a finding to Lich, repair only the topology implicated by that scope path and stable finding ID. Preserve the finding's retry count, then rerun only affected Vampire branches and their downstream Skeleton and Shade items. Do not rerun unrelated sibling Vampire scopes.

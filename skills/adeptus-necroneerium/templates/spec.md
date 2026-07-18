@@ -87,13 +87,13 @@ Use only if contracts are needed.
 
 ### Finding repair ledger
 
-<!-- Keep one stable row per critical finding. Initial rejection opens the finding; it is not a retry. -->
+<!-- Keep one stable row per critical finding. Initial work is attempt 0; first rejection triggers retry 1. -->
 
-| Finding ID | Judged item / acceptance criterion | Responsible layer | Retry 1 | Retry 2 | Status |
-| --- | --- | --- | --- | --- | --- |
-|  |  |  |  |  |  |
+| Scope path | Finding ID | Judged item / acceptance criterion | Responsible layer | Triggered retry | Retry result | Status |
+| --- | --- | --- | --- | --- | --- | --- |
+|  |  |  |  |  |  |  |
 
-Each finding has an isolated two-retry budget. Do not pool counters across findings or reset a counter by renaming the same issue. A finding that still fails after retry 2 terminates the entire project as FAIL.
+First rejection triggers retry 1; rejection of retry 1 triggers retry 2; rejection of retry 2 terminates the entire project as FAIL. Do not pool counters across parent, child, sibling, or unrelated findings. Rerun only the affected descendant branch.
 
 ### Final outcome
 

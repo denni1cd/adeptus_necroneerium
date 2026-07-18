@@ -171,16 +171,18 @@ When review fails, it should identify the lowest responsible layer for each crit
 
 Route the fix only as far backward as necessary. Do not restart the full chain unless the failure actually requires it.
 
-Assign each critical finding a stable identity tied to the judged item, acceptance criterion, contract, or observable defect. The initial construction and first rejection are not retries. Each finding then receives retry 1 and retry 2 independently of every other finding. Rewording, rerouting, or discovering another symptom of the same root defect does not reset its counter.
+Responsibility scopes may branch. A Lich scope may govern many Vampire scopes, and a Vampire scope may govern many downstream implementation and Review items. Each critical finding records its scope path and stable identity tied to the judged item, acceptance criterion, contract, or observable defect. Sibling findings never share counters.
+
+Initial construction is attempt 0. The first rejection immediately triggers retry 1. Rejection of retry 1 immediately triggers retry 2. Rejection of retry 2 stops the entire project with terminal FAIL. Rewording, rerouting, or discovering another symptom of the same root defect does not reset its counter.
 
 A repair reruns the responsible layer and every affected downstream layer:
 
 - Worker failure: Worker, then Review.
-- Tactical failure: Tactical, then Worker, then Review.
-- Strategic failure: Strategic, then Tactical, then Worker, then Review.
+- Tactical failure: Tactical, then affected Worker and Review descendants.
+- Strategic failure: Strategic, then affected Tactical, Worker, and Review descendants.
 - Requirement or external blocker: BLOCKED without consuming an implementation retry.
 
-If the same finding remains after retry 2, stop the entire project and report terminal FAIL with the finding identity and full attempt history.
+Repairs rerun only the affected descendant branch; sibling scopes retain their state and counters. If the same finding remains after retry 2, stop the entire project and report terminal FAIL with the scope path, finding identity, and full attempt history.
 
 ## Cost philosophy
 
