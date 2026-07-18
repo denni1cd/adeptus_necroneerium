@@ -201,14 +201,28 @@ When Shade review fails, identify the lowest responsible layer for each critical
 
 Route fixes only as far backward as necessary. Do not restart the full chain unless the failure actually requires it.
 
-Maximum autonomous repair attempts after failed review: two.
+### Finding identity and isolated retry budgets
 
-After the second failed repair attempt, stop and report honest failure with:
+Shade must assign each critical finding a stable finding ID tied to the judged item, acceptance criterion, contract, or observable defect. Rewording the finding, discovering another symptom of the same root defect, or rerouting it to the correct layer does not create a new finding or reset its counter.
 
-- likely failure layer,
-- what was tried,
-- what remains unresolved,
-- recommended next human decision or redesign.
+The initial construction and first Shade rejection are not retries. That rejection opens the finding with two autonomous retries available.
+
+Retry budgets are isolated per finding:
+
+- Retry 1 routes the finding to its responsible layer, reruns every affected downstream layer, and returns to Shade.
+- Retry 2 does the same only if Shade rejects the same finding again.
+- If Shade rejects that same finding after retry 2, stop the entire project immediately and report terminal FAIL.
+- A different critical finding receives its own stable ID and its own two-retry budget.
+- A test-suite run, review cycle, milestone, phase, or project does not share one aggregate retry counter.
+
+Route and rerun from the responsible layer forward:
+
+- Skeleton finding: Skeleton repairs the implementation, then Shade reviews it.
+- Vampire finding: Vampire repairs the contract, skeleton, or test; Skeleton reruns the affected implementation and validation; then Shade reviews it.
+- Lich finding: Lich repairs the topology; Vampire rebuilds affected contracts and tests; Skeleton reruns affected implementation and validation; then Shade reviews it.
+- Requirement/User finding: stop as BLOCKED until the missing decision or dependency is supplied. Do not consume implementation retries while blocked.
+
+Upstream failures are therefore intentionally more expensive because all affected downstream work must be rerun.
 
 ## Review output format
 
@@ -228,14 +242,18 @@ Use when a critical finding is fixable within the current layer or a lower backw
 
 Include:
 
+- stable finding ID,
 - critical finding,
 - responsible layer,
 - required fix,
-- whether this is repair attempt 1 or 2.
+- next retry number, 1 or 2,
+- downstream layers that must rerun.
+
+After retry 2 fails for the same finding, use terminal FAIL for the entire project and include the full attempt history.
 
 ### BLOCKED
 
-Use when progress requires user input, a requirement decision, an unavailable dependency, or redesign after two failed repair attempts.
+Use when progress requires user input, a requirement decision, or an unavailable dependency. A same-finding failure after retry 2 is terminal FAIL, not BLOCKED.
 
 Include:
 
@@ -253,8 +271,9 @@ Include:
 5. Implement working code and tests.
 6. Run validation.
 7. Review critical/trivial findings.
-8. Patch at most two failed review attempts.
-9. Pass with evidence or block honestly.
+8. Assign stable IDs to critical findings and route each to its responsible layer.
+9. Give each finding at most two isolated retries, rerunning all affected downstream layers.
+10. Pass with evidence, block for an external decision, or terminate the project if the same finding fails after retry 2.
 
 ## Anti-patterns
 
@@ -267,4 +286,7 @@ Do not:
 - perform review theater,
 - expand the task beyond the milestone,
 - force the Adeptus process onto tiny fixes,
+- pool retries across unrelated findings,
+- reset a retry counter by renaming or rerouting the same finding,
+- skip downstream reconstruction after an upstream repair,
 - keep repairing indefinitely after repeated failure.

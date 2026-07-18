@@ -44,7 +44,7 @@ Standalone planning documents, ceremonial logs, and repeated summaries are consi
 - Review moves backward only as far as necessary.
 - Critical findings must be resolved, downgraded with justification, or escalated.
 - Trivial findings must not block working code.
-- Autonomous repair loops are capped.
+- Each critical finding has an isolated two-retry repair budget.
 - Passes require short evidence-based reasoning.
 
 ## Layer responsibilities
@@ -171,16 +171,16 @@ When review fails, it should identify the lowest responsible layer for each crit
 
 Route the fix only as far backward as necessary. Do not restart the full chain unless the failure actually requires it.
 
-Maximum autonomous repair attempts after a failed review: two.
+Assign each critical finding a stable identity tied to the judged item, acceptance criterion, contract, or observable defect. The initial construction and first rejection are not retries. Each finding then receives retry 1 and retry 2 independently of every other finding. Rewording, rerouting, or discovering another symptom of the same root defect does not reset its counter.
 
-After the second failed repair attempt:
+A repair reruns the responsible layer and every affected downstream layer:
 
-- stop,
-- do not continue patching,
-- report honest failure,
-- identify the likely failure layer,
-- summarize what was tried,
-- recommend the next human decision or redesign.
+- Worker failure: Worker, then Review.
+- Tactical failure: Tactical, then Worker, then Review.
+- Strategic failure: Strategic, then Tactical, then Worker, then Review.
+- Requirement or external blocker: BLOCKED without consuming an implementation retry.
+
+If the same finding remains after retry 2, stop the entire project and report terminal FAIL with the finding identity and full attempt history.
 
 ## Cost philosophy
 

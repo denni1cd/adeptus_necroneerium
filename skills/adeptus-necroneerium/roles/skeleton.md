@@ -47,3 +47,7 @@ Provide only what Shade needs:
 - known trivial notes.
 
 Do not produce a long implementation report unless a failure needs explanation.
+
+## Routed retry
+
+When Shade routes a finding to Skeleton, repair only the implementation implicated by that stable finding ID, preserve its retry count, rerun the affected validation, and return the result to Shade.

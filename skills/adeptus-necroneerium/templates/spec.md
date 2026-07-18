@@ -85,9 +85,15 @@ Use only if contracts are needed.
 
 - 
 
-### Repair attempts
+### Finding repair ledger
 
-Attempt count: 0 / 2
+<!-- Keep one stable row per critical finding. Initial rejection opens the finding; it is not a retry. -->
+
+| Finding ID | Judged item / acceptance criterion | Responsible layer | Retry 1 | Retry 2 | Status |
+| --- | --- | --- | --- | --- | --- |
+|  |  |  |  |  |  |
+
+Each finding has an isolated two-retry budget. Do not pool counters across findings or reset a counter by renaming the same issue. A finding that still fails after retry 2 terminates the entire project as FAIL.
 
 ### Final outcome
 

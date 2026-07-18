@@ -131,7 +131,9 @@ On Shade review failure, classify each critical finding by the lowest responsibl
 
 Route fixes only as far backward as necessary. Do not restart the full process unless the failure truly requires it.
 
-Maximum autonomous repair attempts after a failed review: two. After the second failed repair attempt, stop, report honest failure, identify the likely failure layer, summarize what was tried, and recommend the next human decision or redesign.
+Assign each critical finding a stable ID and an isolated retry counter. The initial construction and first rejection are not retries. The responsible layer receives retry 1 and, if the same finding remains, retry 2. Rewording, rerouting, or finding another symptom of the same root defect does not reset the counter. Unrelated findings receive independent counters.
+
+Rerun from the responsible layer forward: Skeleton then Shade; Vampire then Skeleton then Shade; or Lich then Vampire then Skeleton then Shade. If the same finding remains after retry 2, stop the entire project with terminal FAIL. Requirement or external-dependency findings are BLOCKED without consuming implementation retries.
 
 ## Cost discipline
 

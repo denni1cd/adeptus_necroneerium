@@ -50,3 +50,7 @@ Provide only what Skeleton needs:
 - any permitted local contract changes.
 
 Do not hand off tactical commentary that does not affect code.
+
+## Routed retry
+
+When Shade routes a finding to Vampire, repair only the contract, skeleton, test intent, or edge case implicated by that stable finding ID. Preserve the finding's retry count, then rerun Skeleton for all affected implementation and validation before returning to Shade.

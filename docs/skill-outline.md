@@ -176,14 +176,16 @@ Review failure must route to the lowest responsible layer.
 
 Do not restart the full chain unless the failure requires it.
 
-Maximum autonomous repair attempts after failed review: two.
+Assign each critical finding a stable identity and its own retry counter. The initial construction and first rejection are not retries. Each finding receives retry 1 and retry 2. Rewording, rerouting, or discovering another symptom of the same root defect does not reset the counter; unrelated findings have independent counters.
 
-After the second failed repair attempt, stop and report honest failure with:
+Rerun from the responsible layer forward:
 
-- likely failure layer,
-- what was tried,
-- what remains unresolved,
-- recommended next human decision or redesign.
+- Worker finding: Worker, then Review.
+- Tactical finding: Tactical, then Worker, then Review.
+- Strategic finding: Strategic, then Tactical, then Worker, then Review.
+- Requirement/User finding: BLOCKED without consuming implementation retries.
+
+If the same finding remains after retry 2, terminate the entire project as FAIL and report its full attempt history.
 
 ## Review output format
 
@@ -203,14 +205,18 @@ Use when a critical finding is fixable within the current layer or a lower backw
 
 Include:
 
+- stable finding ID,
 - critical finding,
 - responsible layer,
 - required fix,
-- whether this is repair attempt 1 or 2.
+- next retry number, 1 or 2,
+- downstream layers that must rerun.
+
+A same-finding failure after retry 2 is terminal FAIL for the entire project.
 
 ### BLOCKED
 
-Use when progress requires user input, a requirement decision, an unavailable dependency, or redesign after two failed repair attempts.
+Use when progress requires user input, a requirement decision, or an unavailable dependency. Do not use BLOCKED after retry 2; that outcome is terminal FAIL.
 
 Include:
 
@@ -226,8 +232,9 @@ Include:
 3. Keep outputs code-adjacent.
 4. Validate.
 5. Review with critical/trivial classification.
-6. Repair at most twice.
-7. Pass with reasoning or stop honestly.
+6. Assign stable IDs and isolated two-retry budgets to critical findings.
+7. Rerun each repair from the responsible layer through every affected downstream layer.
+8. Pass with reasoning, block for missing external input, or terminate if the same finding fails retry 2.
 
 ## Non-goals
 

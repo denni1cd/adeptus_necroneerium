@@ -54,16 +54,27 @@ Route each critical finding to the lowest responsible layer:
 - Lich: wrong file/module boundary, wrong dependency direction, wrong public entry point, topology prevents the vertical slice from working.
 - Requirement/User: ambiguous acceptance criteria, conflicting goals, missing decision, external blocker.
 
-## Repair limit
+## Finding identity
 
-Maximum autonomous repair attempts after failed review: two.
+Assign every critical finding a stable finding ID tied to the judged item, acceptance criterion, contract, or observable defect. Keep that ID when the wording changes, another symptom of the same root defect appears, or the responsible layer is corrected.
 
-After the second failed repair attempt, stop and report honest failure with:
+Do not combine unrelated findings into one repair counter. Do not reset a counter by renaming or rerouting the same finding.
 
-- likely failure layer,
-- what was tried,
-- what remains unresolved,
-- recommended next human decision or redesign.
+## Isolated retry limit
+
+The initial construction and first rejection are not retries. Each finding receives two autonomous retries after its initial rejection.
+
+- Retry 1 routes to the responsible layer and reruns all affected downstream layers before Shade reviews again.
+- Retry 2 repeats that route only if the same finding remains.
+- If the same finding remains after retry 2, stop the entire project immediately with terminal FAIL.
+- A different finding starts its own two-retry budget.
+
+Required downstream reruns:
+
+- Skeleton finding: Skeleton, then Shade.
+- Vampire finding: Vampire, then Skeleton, then Shade.
+- Lich finding: Lich, then Vampire, then Skeleton, then Shade.
+- Requirement/User finding: BLOCKED without consuming a retry until the missing input is supplied.
 
 ## Output formats
 
@@ -73,8 +84,10 @@ Include short reasoning, validation evidence, and any trivial notes.
 
 ### FAIL
 
-Include critical finding, responsible layer, required fix, and whether this is repair attempt 1 or 2.
+For a routed repair, include stable finding ID, critical finding, responsible layer, required fix, next retry number, and downstream layers to rerun.
+
+For terminal project failure, include the finding ID, responsible layer, initial failure, retry 1 result, retry 2 result, and unresolved defect.
 
 ### BLOCKED
 
-Include blocker, likely failure layer, what was tried, and recommended next action.
+Include blocker, likely failure layer, what was tried, and recommended next action. Do not use BLOCKED for a finding that failed retry 2; that outcome is terminal FAIL.

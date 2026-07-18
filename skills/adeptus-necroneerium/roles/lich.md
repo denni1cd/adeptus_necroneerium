@@ -47,3 +47,7 @@ Provide only what Vampire needs:
 - any explicit non-goals.
 
 Do not hand off unrelated strategic reasoning.
+
+## Routed retry
+
+When Shade routes a finding to Lich, repair only the topology implicated by that stable finding ID. Preserve the finding's retry count, then rerun Vampire for affected contracts and tests, Skeleton for affected implementation and validation, and Shade for review.
