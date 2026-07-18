@@ -1,4 +1,4 @@
-# Project Charter: Layered Agile Coding
+# Project Charter: Adeptus Necroneerium
 
 ## Status
 
@@ -10,7 +10,7 @@ This project is not currently an Adeptus Engineerium replacement. It is a separa
 
 Traditional agentic coding systems often split work into strategic, tactical, and worker layers, but only the worker layer actually writes code. The upper layers tend to produce plans, summaries, reviews, or artifacts that may consume large amounts of tokens without directly advancing the codebase.
 
-Layered Agile Coding shifts that model.
+Adeptus Necroneerium shifts that model.
 
 Each layer contributes a different resolution of code:
 
@@ -235,7 +235,7 @@ The preferred rhythm is:
 9. When is up-to-date/cloud-model knowledge actually needed?
 10. How do we compare this against raw Codex fairly?
 11. What evidence is enough to downgrade a review finding from critical to trivial?
-12. What task classes are best suited for layered coding versus direct coding?
+12. What task classes are best suited for the Adeptus workflow versus direct coding?
 
 ## Success criteria
 

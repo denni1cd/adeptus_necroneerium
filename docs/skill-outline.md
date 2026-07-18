@@ -1,8 +1,8 @@
-# Skill Outline: Layered Agile Coding
+# Skill Outline: Adeptus Necroneerium
 
 ## Purpose
 
-Layered Agile Coding is a coding execution skill for producing working, tested code while minimizing non-code process waste.
+Adeptus Necroneerium is a coding execution skill for producing working, tested code while minimizing non-code process waste.
 
 The skill is not an agent framework by default. It is a workflow that can be used by a human, Codex, ChatGPT, or another coding agent when direct one-shot coding is too likely to drift but a full planning bureaucracy would be too expensive.
 
@@ -58,7 +58,7 @@ Use when contracts matter but repo structure is mostly obvious.
 4. Run validation.
 5. Review critical/trivial findings.
 
-### Layered mode
+### Adeptus mode
 
 Use when the change affects structure, multiple files, or public interfaces.
 
@@ -217,7 +217,7 @@ Include:
 
 ## Minimal skill loop
 
-1. Decide whether Direct, Tactical, or Layered mode is needed.
+1. Decide whether Direct, Tactical, or Adeptus mode is needed.
 2. Build the smallest useful vertical slice.
 3. Keep outputs code-adjacent.
 4. Validate.
@@ -244,6 +244,6 @@ A good first experiment should compare:
 
 - raw direct coding,
 - tactical mode,
-- layered mode.
+- Adeptus mode.
 
 The project should only continue adding structure if the experiment shows a real advantage in working-code quality, reduced drift, or reduced wasted process.

@@ -1,4 +1,4 @@
-# Layered Agile Coding Spec
+# Adeptus Necroneerium Spec
 
 Use this template only when it helps implementation or review. Skip it for tiny Direct mode work.
 
@@ -14,7 +14,7 @@ Use this template only when it helps implementation or review. Skip it for tiny 
 
 ## Selected mode
 
-<!-- Direct, Tactical, or Layered. Explain briefly why. -->
+<!-- Direct, Tactical, or Adeptus. Explain briefly why. -->
 
 Mode: 
 Reason: 

@@ -1,6 +1,6 @@
 # Adeptus Necroneerium
 
-Adeptus Necroneerium is an experiment in **Layered Agile Coding**: a coding workflow where each layer contributes directly to working software instead of producing piles of planning artifacts.
+Adeptus Necroneerium is a coding workflow where each responsibility layer contributes directly to working software instead of producing piles of planning artifacts.
 
 The name is a nod to Adeptus Engineerium and to the project’s core metaphor: start with the skeleton, then fill in the gaps.
 
@@ -35,7 +35,7 @@ Standalone planning documents, ceremonial logs, and repeated summaries are treat
 
 Concept and design exploration.
 
-This is not currently an Adeptus Engineerium replacement. It is a separate project for exploring whether layered code construction can produce better cost/benefit than raw one-shot coding for some classes of software tasks.
+This is not currently an Adeptus Engineerium replacement. It is a separate project for exploring whether progressive code construction can produce better cost/benefit than raw one-shot coding for some classes of software tasks.
 
 ## Project shape
 

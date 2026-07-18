@@ -2,7 +2,7 @@
 
 ## Project mission
 
-Adeptus Necroneerium explores Layered Agile Coding: a workflow where strategic, tactical, worker, and review layers each contribute directly to working software instead of producing large planning artifacts.
+Adeptus Necroneerium is a coding workflow where strategic, tactical, worker, and review responsibilities each contribute directly to working software instead of producing large planning artifacts.
 
 The project exists to test whether progressive code construction can outperform raw one-shot coding on practical tasks without becoming another token-heavy process.
 
@@ -10,9 +10,9 @@ This is not a council or debate project. It is a Codex coding skill focused on g
 
 ## Codex skill entrypoint
 
-This repository treats `skills/layered-agile-coding/SKILL.md` as the Codex skill entrypoint for Layered Agile Coding.
+This repository treats `skills/adeptus-necroneerium/SKILL.md` as the Codex skill entrypoint for Adeptus Necroneerium. The repository and prompt alias is `adeptus_necroneerium`; the registered skill name is `adeptus-necroneerium` because Codex skill names require hyphen-case.
 
-Before using a layered workflow, decide whether the task actually meets the skill entry conditions. Direct implementation is preferred for tiny or obvious fixes.
+Before using the Adeptus workflow, decide whether the task actually meets the skill entry conditions. Direct implementation is preferred for tiny or obvious fixes.
 
 Use the skill when the task involves new modules, public contracts, multiple files, validation logic, meaningful tests, prior implementation drift, unclear module boundaries, or a failed direct coding attempt.
 
@@ -31,7 +31,7 @@ These names are responsibility labels, not a reason to create separate agent con
 
 ## Spec template
 
-Use `skills/layered-agile-coding/templates/spec.md` only when a lightweight spec will reduce ambiguity for Tactical or Layered mode work.
+Use `skills/adeptus-necroneerium/templates/spec.md` only when a lightweight spec will reduce ambiguity for Tactical or Adeptus mode work.
 
 Skip the spec for Direct mode tasks where it would become process waste.
 
@@ -160,9 +160,9 @@ Prefer vertical slices. A useful slice proves behavior end to end:
 
 Do not build a huge abstract skeleton before proving any behavior works.
 
-Skip the layered process for tiny fixes. Use direct implementation when the shape is obvious.
+Skip the Adeptus process for tiny fixes. Use direct implementation when the shape is obvious.
 
-Escalate to layered coding when the task involves new modules, public contracts, multiple files, validation logic, or previous implementation drift.
+Escalate to the Adeptus workflow when the task involves new modules, public contracts, multiple files, validation logic, or previous implementation drift.
 
 ## Current project status
 

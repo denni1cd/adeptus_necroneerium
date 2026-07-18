@@ -1,9 +1,9 @@
 ---
-name: layered-agile-coding
-description: Use for Codex coding tasks where direct one-shot implementation is likely to drift but heavy planning would waste tokens. Applies Lich strategic topology, Vampire tactical contracts, Skeleton implementation, and Shade backward review only as needed to reach working, validated code.
+name: adeptus-necroneerium
+description: Use when the user requests adeptus_necroneerium, Adeptus Necroneerium, or @adeptus-necroneerium, and for Codex coding tasks where direct one-shot implementation is likely to drift but heavy planning would waste tokens. Applies Lich strategic topology, Vampire tactical contracts, Skeleton implementation, and Shade backward review only as needed to reach working, validated code.
 ---
 
-# Layered Agile Coding
+# Adeptus Necroneerium
 
 ## Mission
 
@@ -38,9 +38,9 @@ Do not create a new context or agent call merely because a role has a name. Role
 
 ## Spec template
 
-For non-trivial work, use `skills/layered-agile-coding/templates/spec.md` as the lightweight spec format.
+For non-trivial work, use `skills/adeptus-necroneerium/templates/spec.md` as the lightweight spec format.
 
-The spec is optional. Use it when it will reduce ambiguity for a Tactical or Layered task. Skip it for Direct mode tasks where it would become process waste.
+The spec is optional. Use it when it will reduce ambiguity for a Tactical or Adeptus task. Skip it for Direct mode tasks where it would become process waste.
 
 A spec should be treated as a working-code guide, not a planning artifact. It should capture:
 
@@ -76,7 +76,7 @@ Use when the file structure is obvious but contracts matter.
 4. Run validation.
 5. Have the Shade review findings as critical or trivial.
 
-### Layered mode
+### Adeptus mode
 
 Use when the change affects repo structure, multiple files, public interfaces, or validation logic.
 
@@ -240,7 +240,7 @@ Include:
 
 ## Minimal execution loop
 
-1. Determine Direct, Tactical, or Layered mode.
+1. Determine Direct, Tactical, or Adeptus mode.
 2. Inspect only needed context.
 3. Use the spec template only if it helps implementation or review.
 4. Produce code-adjacent structure only when it helps implementation.
@@ -260,5 +260,5 @@ Do not:
 - write implementation reports that no later step uses,
 - perform review theater,
 - expand the task beyond the milestone,
-- force the layered process onto tiny fixes,
+- force the Adeptus process onto tiny fixes,
 - keep repairing indefinitely after repeated failure.
