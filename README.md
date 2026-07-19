@@ -41,6 +41,8 @@ The plugin packages a session-scoped completion ledger and [Codex Stop hook](htt
 
 An ordinary Codex session creates no ledger and its Stop event is untouched. Active state lives under the plugin data directory, not in the target repository. A successful terminal check seals that session ledger. The user can explicitly cancel a run with `@adeptus-necroneerium abort`; disabling the hook through `/hooks` is the administrative escape hatch.
 
+Installing or enabling the plugin does not automatically trust its executable hooks. After each new or changed hook definition, open `/hooks`, review both plugin-bundled hooks, and explicitly trust them before starting the test in a new thread. Codex skips an untrusted hook, so an invocation is not proven active unless the injected context names the session ledger and state tool. A successful activation also writes `activation-receipt.json` beside the session ledger in the plugin data directory for diagnosis outside the target.
+
 The hook is a lifecycle guard, not a substitute for implementation judgment. Codex still has to construct the complete acceptance inventory, update it honestly, execute work, and gather direct evidence. Hook source should be reviewed before enabling the plugin, as with any executable repository content.
 
 ## Forward construction and backward review

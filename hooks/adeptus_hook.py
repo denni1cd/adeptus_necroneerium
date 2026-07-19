@@ -40,6 +40,16 @@ def _emit(value: dict[str, Any]) -> None:
     sys.stdout.write("\n")
 
 
+def _user_prompt_context(message: str) -> dict[str, Any]:
+    """Return the current Codex UserPromptSubmit context envelope."""
+    return {
+        "hookSpecificOutput": {
+            "hookEventName": "UserPromptSubmit",
+            "additionalContext": message,
+        }
+    }
+
+
 def _read_input() -> dict[str, Any]:
     value = json.load(sys.stdin)
     if not isinstance(value, dict):
@@ -65,12 +75,10 @@ def on_user_prompt(payload: dict[str, Any]) -> None:
             state["user_cancelled"] = True
             save_state(state_path, state)
         _emit(
-            {
-                "additionalContext": (
-                    "The user explicitly aborted the active Adeptus run. The completion "
-                    "guard is disabled for this session until a new explicit invocation."
-                )
-            }
+            _user_prompt_context(
+                "The user explicitly aborted the active Adeptus run. The completion "
+                "guard is disabled for this session until a new explicit invocation."
+            )
         )
         return
     if not isinstance(prompt, str) or not INVOCATION.search(prompt):
@@ -78,12 +86,10 @@ def on_user_prompt(payload: dict[str, Any]) -> None:
         return
     if state_path is None:
         _emit(
-            {
-                "additionalContext": (
-                    "Adeptus invocation detected, but its session completion state "
-                    "could not be created. Do not begin target writes; report this hook failure."
-                )
-            }
+            _user_prompt_context(
+                "Adeptus invocation detected, but its session completion state "
+                "could not be created. Do not begin target writes; report this hook failure."
+            )
         )
         return
     if state_path.exists():
@@ -94,17 +100,26 @@ def on_user_prompt(payload: dict[str, Any]) -> None:
     else:
         state = new_state(payload["session_id"], payload.get("cwd", ""))
         save_state(state_path, state)
-    _emit(
+    receipt_path = state_path.with_name("activation-receipt.json")
+    save_state(
+        receipt_path,
         {
-            "additionalContext": (
-                "ADEPTUS COMPLETION GUARD IS ACTIVE. Its session ledger is "
-                f"{state_path}. Before target writes, initialize the binding acceptance "
-                f"inventory with {PLUGIN_ROOT / 'scripts' / 'adeptus_state.py'}. Keep it "
-                "current as evidence, gates, findings, and blockers change. A Stop hook "
-                "will reject final output unless PASS, BLOCKED, or terminal FAIL is "
-                "mechanically justified by that ledger."
-            )
-        }
+            "event": "UserPromptSubmit",
+            "guard_active": True,
+            "session_id": payload["session_id"],
+            "state_path": str(state_path),
+            "state_tool_path": str(PLUGIN_ROOT / "scripts" / "adeptus_state.py"),
+        },
+    )
+    _emit(
+        _user_prompt_context(
+            "ADEPTUS COMPLETION GUARD IS ACTIVE. Its session ledger is "
+            f"{state_path}, and its activation receipt is {receipt_path}. Before target "
+            "writes, initialize the binding acceptance inventory with "
+            f"{PLUGIN_ROOT / 'scripts' / 'adeptus_state.py'}. Keep it current as evidence, "
+            "gates, findings, and blockers change. A Stop hook will reject final output "
+            "unless PASS, BLOCKED, or terminal FAIL is mechanically justified by that ledger."
+        )
     )
 
 
@@ -172,12 +187,10 @@ def main() -> None:
             )
         else:
             _emit(
-                {
-                    "additionalContext": (
-                        "Adeptus completion guard could not activate safely. Do not begin "
-                        f"target writes. Repair the guard or report the external limitation. Error: {error}"
-                    )
-                }
+                _user_prompt_context(
+                    "Adeptus completion guard could not activate safely. Do not begin "
+                    f"target writes. Repair the guard or report the external limitation. Error: {error}"
+                )
             )
 
 

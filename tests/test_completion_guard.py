@@ -230,6 +230,15 @@ class StopHookPrototypeTests(unittest.TestCase):
         )
         return json.loads(result.stdout)
 
+    def user_prompt_context(self, result: dict[str, object]) -> str:
+        self.assertEqual(set(result), {"hookSpecificOutput"})
+        output = result["hookSpecificOutput"]
+        self.assertIsInstance(output, dict)
+        self.assertEqual(output.get("hookEventName"), "UserPromptSubmit")
+        context = output.get("additionalContext")
+        self.assertIsInstance(context, str)
+        return context
+
     def test_stop_hook_blocks_then_allows_a_certified_pass(self) -> None:
         with tempfile.TemporaryDirectory() as plugin_data:
             path = session_state_path(plugin_data, "s-1")
@@ -306,8 +315,14 @@ class StopHookPrototypeTests(unittest.TestCase):
                     "prompt": "Use @adeptus-necroneerium to implement the request.",
                 },
             )
-            self.assertIn("ADEPTUS COMPLETION GUARD IS ACTIVE", invocation["additionalContext"])
-            self.assertTrue(session_state_path(plugin_data, "invoked").exists())
+            context = self.user_prompt_context(invocation)
+            self.assertIn("ADEPTUS COMPLETION GUARD IS ACTIVE", context)
+            state_path = session_state_path(plugin_data, "invoked")
+            self.assertTrue(state_path.exists())
+            receipt_path = state_path.with_name("activation-receipt.json")
+            receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+            self.assertTrue(receipt["guard_active"])
+            self.assertEqual(receipt["state_path"], str(state_path))
 
     def test_explicit_abort_disables_an_active_guard(self) -> None:
         with tempfile.TemporaryDirectory() as plugin_data:
@@ -320,7 +335,7 @@ class StopHookPrototypeTests(unittest.TestCase):
             aborted = self.run_hook(
                 plugin_data, {**common, "prompt": "@adeptus-necroneerium abort"}
             )
-            self.assertIn("explicitly aborted", aborted["additionalContext"])
+            self.assertIn("explicitly aborted", self.user_prompt_context(aborted))
             stopped = self.run_hook(
                 plugin_data,
                 {"hook_event_name": "Stop", "session_id": "abortable", "cwd": "/target"},
@@ -366,7 +381,10 @@ class StopHookPrototypeTests(unittest.TestCase):
                 check=True,
             )
             output = json.loads(result.stdout)
-            self.assertIn("ADEPTUS COMPLETION GUARD IS ACTIVE", output["additionalContext"])
+            self.assertIn(
+                "ADEPTUS COMPLETION GUARD IS ACTIVE",
+                self.user_prompt_context(output),
+            )
 
 
 class StateCliTests(unittest.TestCase):
