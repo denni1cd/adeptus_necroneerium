@@ -1,263 +1,149 @@
-# Skill Outline: Adeptus Necroneerium
-
-## Purpose
-
-Adeptus Necroneerium is a coding execution skill for producing working, tested code while minimizing non-code process waste.
-
-The skill is not an agent framework by default. It is a workflow that can be used by a human, Codex, ChatGPT, or another coding agent when direct one-shot coding is too likely to drift but a full planning bureaucracy would be too expensive.
+# Adeptus Necroneerium Design Outline
 
 ## One-sentence definition
 
-Use the lightest effective path from request to working validated code by moving through code topology, contracts, implementation, and review only when each step directly helps the codebase.
+Codex completes a substantial coding request by orchestrating one whole-project Lich draft, multiple Vampire subsystem drafts, their Skeleton implementation assignments, and evidence-based Shade gates that route defects backward without discarding unaffected work.
 
-## Operating principle
+## Invocation and modes
 
-Working code over comprehensive agent artifacts.
+The skill is strictly opt-in. After explicit invocation, choose the lightest safe mode:
 
-Every meaningful output must either:
+- **Direct:** obvious bounded implementation and direct validation.
+- **Tactical:** one Vampire scope with one or more Skeleton assignments and Shade gates.
+- **Adeptus:** one Lich, multiple Vampire scopes as warranted, nested Skeleton work, recalls, phase gates, and final integrated review.
 
-- become code,
-- become a test,
-- become an embedded contract or docstring,
-- become an executable validation step,
-- or identify a blocker that prevents code from proceeding.
+Do not force Adeptus mode onto work whose risk does not justify the hierarchy.
 
-## Invocation boundary
+## Authority model
 
-This skill is strictly opt-in. Use it only when the user explicitly requests Adeptus Necroneerium by name, writes `adeptus_necroneerium`, or invokes `@adeptus-necroneerium`.
+Binding authority belongs to the user's requested outcomes, explicit constraints, acceptance criteria, safety requirements, and phase gates.
 
-Never infer invocation from task complexity, file count, ambiguity, prior drift, or a failed direct attempt. Without an explicit request, use the ordinary Codex workflow.
+Internal outputs are revisable drafts:
 
-After explicit invocation, the following traits help choose Tactical or Adeptus mode:
+- Lich drafts strategic topology and scope decomposition.
+- Vampire drafts tactical contracts and work decomposition.
+- Skeleton drafts and implements local details.
+- Tests generated from internal drafts remain subject to Shade's independent comparison with user acceptance.
 
-- new modules or files,
-- public function/class/data contracts,
-- multiple files,
-- validation logic,
-- meaningful tests,
-- prior implementation drift,
-- unclear module boundaries,
-- a failed direct coding attempt.
+Lower responsibilities may revise upstream drafts without routine approval when evidence supports the change. They must propagate effects to the current shared design and revalidate invalidated work.
 
-Choose Direct mode within the invoked skill for tiny obvious fixes, pure documentation edits, simple config changes, or mechanical edits where direct implementation is the shortest safe path.
+## Nested construction lifecycle
 
-## Workflow modes
+### Whole-project Lich pass
 
-### Direct mode
+Read the complete request. Create a breadth-complete strategic draft containing acceptance coverage, proposed topology, public seams, Vampire scopes, dependency order, phase gates, and high-risk integration assumptions.
 
-Use when the shape is obvious.
+The Lich must not stop at the next vertical slice. It anticipates future phases without implementing them before binding gates permit it.
 
-1. Implement the change.
-2. Add or update tests if relevant.
-3. Run validation.
-4. Report result.
+### Vampire activation
 
-### Tactical mode
+Codex selects a dependency-ready Vampire scope, normally one at a time. The Vampire creates the complete tactical draft for that subsystem: files, contracts, tests, edge cases, cross-scope interfaces, Skeleton assignments, and retirement conditions.
 
-Use when contracts matter but repo structure is mostly obvious.
+### Skeleton execution
 
-1. Identify the current milestone or acceptance criteria.
-2. Draft the minimal function/class/data/test skeleton required by the milestone.
-3. Implement the skeleton.
-4. Run validation.
-5. Review critical/trivial findings.
+Codex executes cohesive Skeleton assignments in dependency order. A Skeleton normally owns one file and its relevant stubs, or a tightly coupled implementation-and-test unit. Tiny assignments should be combined when separation adds no quality.
 
-### Adeptus mode
+Each item receives a focused Shade gate. A PASS marks intermediate progress and Codex immediately schedules the next known item.
 
-Use when the change affects structure, multiple files, or public interfaces.
+### Vampire integration and retirement
 
-1. Strategic topology: define or update the minimal file/module structure for the next vertical slice.
-2. Tactical skeleton: define the necessary function signatures, data contracts, docstrings, and tests for the current milestone.
-3. Worker implementation: fill behavior, complete tests, and wire the slice.
-4. Review: validate behavior, classify findings, patch clear failures, and route unresolved issues backward only as far as necessary.
+After all required Skeleton items pass, Shade verifies the complete subsystem and implicated seams. Codex retires the Vampire after PASS and activates the next ready scope.
 
-## Layer responsibilities
+Retirement is reversible through evidence-based recall.
 
-### Strategic layer: code topology
+### Phase and project gates
 
-Produces repository or module structure needed for the next working slice.
+Shade verifies each binding phase checkpoint and the final integrated product against the complete acceptance inventory. Codex continues automatically across requested phases unless genuinely blocked.
 
-Allowed outputs:
+## Dependency model
 
-- file tree changes,
-- module boundaries,
-- dependency direction,
-- public entry points,
-- data-flow boundaries,
-- structural patch.
+The ownership structure is hierarchical, but implementation dependencies may form a DAG. The Lich drafts cross-scope seams. Codex tracks readiness and invalidation.
 
-Must avoid:
+If work remains but nothing is dependency-ready, Codex diagnoses missing decomposition, a dependency cycle, or an external blocker rather than stopping silently.
 
-- long strategy prose,
-- speculative architecture,
-- implementation logic,
-- structures not required by the current milestone.
+## Draft revision
 
-May push back if the request is too unclear, broad, contradictory, or cannot be decomposed into a working vertical slice.
+Free revision prevents early guesses from becoming expensive constraints. Propagation prevents free revision from becoming uncontrolled drift.
 
-### Tactical layer: contracts and skeletons
+A material revision records only what downstream execution needs:
 
-Produces the minimal contracts needed to satisfy the strategic milestone.
+- evidence or reason;
+- changed draft or contract;
+- affected consumers or siblings;
+- invalidated passed work;
+- required revalidation.
 
-Allowed outputs:
+Normal revision is not a retry. Shade rejection is.
 
-- function signatures,
-- class/dataclass/enum definitions,
-- data contracts,
-- docstrings,
-- expected exceptions,
-- test names,
-- test intent,
-- edge cases.
+## Shade gates and backward routing
 
-Must satisfy the milestone, no more and no less.
+Shade reviews:
 
-Must avoid:
+1. each Skeleton implementation unit;
+2. each integrated Vampire subsystem;
+3. required phase checkpoints;
+4. the final project.
 
-- overdesign,
-- speculative APIs,
-- future-proofing not required by the milestone,
-- full implementation,
-- unrelated refactors.
+Shade routes a critical finding to the lowest responsible level:
 
-May push back if the milestone is insufficient, overbroad, internally inconsistent, or would require unjustified abstractions.
+- Skeleton behavior;
+- Vampire tactical contract or subsystem decomposition;
+- Lich topology or whole-request decomposition;
+- user requirement or external dependency.
 
-### Worker layer: implementation
+Shade judges observed acceptance, not conformance to an internal draft alone.
 
-Produces working behavior.
+## Vampire recall
 
-Allowed outputs:
+Shade may recall an active or retired Vampire for a directly evidenced tactical or integration defect. Lich may require recall after strategic revision. Codex executes the recall with a compact packet containing stable scope identity, relevant current and previous drafts, finding evidence, retry state, invalidated descendants, preserved siblings, and retirement conditions.
 
-- completed function bodies,
-- completed tests,
-- private helpers,
-- wiring between modules,
-- validation runs,
-- focused patches for failures.
+A current Vampire may report a sibling conflict but does not reopen the sibling without Shade adjudication or Lich revision.
 
-Must avoid:
+## Isolated retry semantics
 
-- silent public contract changes,
-- expanding scope,
-- replacing architecture without explanation,
-- broad unrelated changes.
+Initial judged work is attempt 0. First rejection triggers retry 1. Rejection of retry 1 triggers retry 2. Rejection after retry 2 for the same finding terminates the project.
 
-May push back if the contract cannot be implemented safely with the information provided.
+Every critical finding retains a stable ID, scope path, judged item, root defect, and independent counter. Recalls, reroutes, renamed symptoms, and new contexts never reset it.
 
-### Review layer: verification and routing
+Only the affected branch reruns:
 
-Checks the result against acceptance criteria and contracts.
+- Skeleton finding: Skeleton and its Shade gate.
+- Vampire finding: Vampire, invalidated Skeleton descendants, Vampire gate, and implicated seams.
+- Lich finding: Lich, invalidated Vampire branches and descendants, then affected higher gates.
+- Requirement finding: BLOCKED until input exists, without consuming an implementation retry.
 
-Required checks:
+## Completion accounting
 
-- tests pass,
-- acceptance criteria are satisfied,
-- implementation matches contracts,
-- public contracts did not drift silently,
-- no placeholder code remains,
-- no broad unrelated changes were introduced.
+Large Adeptus runs maintain compact orchestration state containing the complete acceptance inventory, Lich draft revision, Vampire graph, active Skeleton assignments, invalidated work, Shade findings, and retry histories.
 
-Every finding must be critical or trivial.
+The following are nonterminal while requested work remains:
 
-Critical findings block pass and must be resolved, explicitly downgraded with justification, or escalated.
+- working vertical slice;
+- Skeleton PASS;
+- Vampire PASS;
+- milestone PASS;
+- phase PASS.
 
-Trivial findings do not block pass and may be noted, deferred, or ignored.
+Project terminal outcomes are:
 
-All passes require short reasoning and validation evidence.
+- PASS after every binding item and gate passes;
+- BLOCKED for genuinely unavailable input, authority, or dependency;
+- terminal FAIL after rejection of retry 2 for one stable finding.
 
-## Backward review flow
+## Evidence standards
 
-Review failure must route to the lowest responsible layer.
+Shade verifies claims at the boundary claimed. Run README commands verbatim. Exercise real UI, CLI, API, storage, process, restart, scheduling, and concurrency behavior when claimed. Scan cleanup only after the last command capable of regenerating debris. State unverified requirements explicitly.
 
-- Worker: implementation bug, failed test, placeholder code, missing edge case, behavior contradicts contract.
-- Tactical: wrong function contract, missing data shape, wrong exception behavior, tests prove the wrong behavior, skeleton is over/under-specified.
-- Strategic: wrong file/module boundary, wrong dependency direction, wrong public entry point, topology prevents the vertical slice from working.
-- Requirement/User: ambiguous acceptance criteria, conflicting goals, missing decision, external blocker.
+## Token discipline
 
-Do not restart the full chain unless the failure requires it.
+Quality and total token efficiency outrank speed.
 
-Responsibility scopes may branch. One Strategic/Lich scope may govern many Tactical/Vampire scopes, and one Tactical/Vampire scope may govern many downstream Worker/Skeleton and Review/Shade items. Assign each finding a scope path, stable identity, judged item, and isolated retry counter. Siblings never share counters.
+- Read the complete specification once at Lich level.
+- Pass scoped context downward instead of restating the project.
+- Keep drafts actionable and compact.
+- Avoid an agent or report per function.
+- Preserve passed work and rerun only invalidated descendants.
+- Collapse to a lighter mode when hierarchy costs more than the risk it prevents.
+- Never save tokens by omitting necessary code, tests, or direct verification.
 
-Initial construction is attempt 0. The first rejection immediately triggers retry 1. Rejection of retry 1 immediately triggers retry 2. Rejection of retry 2 terminates the entire project. Rewording, rerouting, or discovering another symptom of the same root defect does not reset the counter.
-
-Rerun from the responsible layer forward:
-
-- Worker finding: Worker, then Review.
-- Tactical finding: Tactical, then affected Worker and Review descendants.
-- Strategic finding: Strategic, then affected Tactical, Worker, and Review descendants.
-- Requirement/User finding: BLOCKED without consuming implementation retries.
-
-Rerun only the affected descendant branch; sibling scopes retain their state and counters. If the same finding remains after retry 2, terminate the entire project as FAIL and report its scope path and full attempt history.
-
-## Review output format
-
-### PASS
-
-Use when no critical findings remain.
-
-Include:
-
-- short reasoning,
-- validation evidence,
-- any trivial notes.
-
-### FAIL
-
-Use when a critical finding is fixable within the current layer or a lower backward route.
-
-Include:
-
-- stable finding ID,
-- parent scope and judged item,
-- critical finding,
-- responsible layer,
-- required fix,
-- next retry number, 1 or 2,
-- affected descendant branch that must rerun.
-
-A same-finding failure after retry 2 is terminal FAIL for the entire project.
-
-### BLOCKED
-
-Use when progress requires user input, a requirement decision, or an unavailable dependency. Do not use BLOCKED after retry 2; that outcome is terminal FAIL.
-
-Include:
-
-- blocker,
-- likely failure layer,
-- what was tried,
-- recommended next action.
-
-## Minimal skill loop
-
-1. Decide whether Direct, Tactical, or Adeptus mode is needed.
-2. Build the smallest useful vertical slice.
-3. Keep outputs code-adjacent.
-4. Validate.
-5. Review with critical/trivial classification.
-6. Assign stable IDs and isolated two-retry budgets to critical findings.
-7. Rerun each repair from the responsible layer through every affected downstream layer.
-8. Pass with reasoning, block for missing external input, or terminate if the same finding fails retry 2.
-
-## Non-goals
-
-This skill is not trying to:
-
-- create a new heavy agent bureaucracy,
-- create an agent per function,
-- force strategic/tactical layers onto tiny fixes,
-- maximize documentation,
-- replace direct coding where direct coding is best,
-- hide failure behind endless retries.
-
-## First experiment target
-
-The first practical experiment should be small but non-trivial: enough to require contracts and tests, but not enough to justify a large framework.
-
-A good first experiment should compare:
-
-- raw direct coding,
-- tactical mode,
-- Adeptus mode.
-
-The project should only continue adding structure if the experiment shows a real advantage in working-code quality, reduced drift, or reduced wasted process.
+The hierarchy succeeds only when its framing cost is repaid through reduced drift, rework, false claims, or user reprompting.

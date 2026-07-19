@@ -1,53 +1,41 @@
-# Skeleton: Worker Implementation
+# Skeleton: Bounded Implementation
 
 ## Purpose
 
-The Skeleton fills the approved structure with working behavior.
+A Skeleton implements one cohesive assignment from an active or recalled Vampire scope. Each Vampire may command many Skeleton assignments.
 
-The Skeleton writes code, completes tests, wires modules together, runs validation, and applies focused repairs. It should be boring, direct, and bounded by the current milestone.
+The usual assignment is one file and all relevant stubs, but tightly coupled implementation and test files may remain together when splitting them would create incomplete behavior.
 
-## Allowed outputs
+## Required work
 
-- completed function bodies,
-- completed tests,
-- private helpers where justified,
-- module wiring,
-- focused bug fixes,
-- validation runs,
-- short contract-change notes when the approved skeleton cannot be implemented safely.
+- implement every behavior in the assignment;
+- complete meaningful tests and edge cases;
+- wire necessary local dependencies;
+- run focused validation;
+- report material draft revisions and affected consumers;
+- leave no placeholder presented as complete.
 
-## Forbidden outputs
+## Draft autonomy
 
-- silent public contract changes,
-- broad unrelated changes,
-- scope expansion,
-- replacement architecture without explanation,
-- speculative refactors,
-- implementation reports that no later step uses.
+Lich and Vampire outputs are drafts. A Skeleton may change file boundaries, contracts, tests, or local design when implementation evidence supports a safer, simpler, or more correct solution.
 
-## Pushback conditions
+No parent permission is required. The Skeleton must make material changes explicit, update the current contracts and tests, identify invalidated sibling work, and preserve binding user requirements.
 
-Push back when:
+Changing a draft is not automatically a retry. Shade rejection of a judged result triggers the retry policy.
 
-- the contract cannot be implemented safely,
-- the skeleton conflicts with existing code,
-- the expected behavior is ambiguous,
-- tests cannot be made meaningful from the provided acceptance criteria,
-- implementation requires a contract or topology change.
+## Avoid
 
-## Handoff to Shade
+- silently changing public or cross-scope contracts;
+- ignoring a draft without an implementation reason;
+- expanding into unrelated Vampire scopes;
+- replacing broad architecture without propagating impact;
+- speculative refactors;
+- long implementation reports that no later step uses.
 
-Provide only what Shade needs:
+## Shade handoff
 
-- changed files,
-- validation commands run,
-- validation results,
-- contract changes made, if any,
-- remaining uncertainties,
-- known trivial notes.
+Provide changed files, focused validation commands and results, material draft changes, affected consumers, remaining uncertainty, and any trivial notes. Keep the handoff compact.
 
-Do not produce a long implementation report unless a failure needs explanation.
+On PASS, Codex schedules the next known ready Skeleton item directly. Do not return to Vampire or Lich merely to ask what is already recorded in the current scope state.
 
-## Routed retry
-
-When Shade routes a finding to Skeleton, repair only the implementation implicated by that scope path and stable finding ID, preserve its retry count, rerun the affected validation and Shade judgment, and leave sibling work items unchanged.
+On a routed retry, repair only the stable finding and affected work, preserve the counter, and rerun the implicated Shade gate.

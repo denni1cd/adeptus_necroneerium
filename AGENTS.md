@@ -1,171 +1,58 @@
-# AGENTS.md
+# Repository Guidance
 
-## Project mission
+## Mission
 
-Adeptus Necroneerium is a coding workflow where strategic, tactical, worker, and review responsibilities each contribute directly to working software instead of producing large planning artifacts.
+This repository develops Adeptus Necroneerium, a strictly on-demand Codex coding skill. Its purpose is to test whether hierarchical, revisable code drafts improve quality and total token efficiency over plain Codex without creating process bloat.
 
-The project exists to test whether progressive code construction can outperform raw one-shot coding on practical tasks without becoming another token-heavy process.
+The skill entrypoint is `skills/adeptus-necroneerium/SKILL.md`. Keep the repository alias `adeptus_necroneerium` and registered skill name `adeptus-necroneerium` distinct where syntax requires it.
 
-This is not a council or debate project. It is a Codex coding skill focused on getting from request to working, validated code.
+## Invocation boundary
 
-## Codex skill entrypoint
+Never invoke the skill implicitly. It runs only when the user explicitly requests Adeptus Necroneerium, writes `adeptus_necroneerium`, or invokes `@adeptus-necroneerium`.
 
-This repository treats `skills/adeptus-necroneerium/SKILL.md` as the Codex skill entrypoint for Adeptus Necroneerium. The repository and prompt alias is `adeptus_necroneerium`; the registered skill name is `adeptus-necroneerium` because Codex skill names require hyphen-case.
+## Canonical model
 
-This skill is strictly on demand. Never invoke it automatically from task complexity, file count, ambiguity, implementation drift, or a failed direct coding attempt. Use it only when the user explicitly requests Adeptus Necroneerium by name, writes `adeptus_necroneerium`, or invokes `@adeptus-necroneerium`.
+Codex is the orchestrator.
 
-After explicit invocation, choose the lightest safe mode. Direct implementation remains appropriate for tiny or obvious fixes even inside an Adeptus Necroneerium run.
+- One Lich reads the complete request and creates a whole-project strategic draft.
+- The Lich may define many Vampire tactical scopes.
+- Each Vampire may define many Skeleton implementation assignments.
+- Shade reviews at Skeleton, Vampire, phase, and project resolution and may route or recall work backward.
 
-Do not create extra artifacts simply because the skill exists. The skill is a code execution workflow, not a documentation workflow.
+Roles are responsibility labels, not mandatory separate agents or personalities. Use separate contexts only when they materially help the task.
 
-## Named roles
+Responsibility is hierarchical; code dependencies may form a DAG.
 
-The project uses lightweight necromantic role names to make the layers memorable:
+## Draft authority
 
-- **Lich** = Strategic topology
-- **Vampire** = Tactical contracts
-- **Skeleton** = Worker implementation
-- **Shade** = Review and backward routing
+User requirements, explicit acceptance criteria, safety constraints, and phase gates are binding.
 
-These names are responsibility labels, not a reason to create separate agent contexts or perform roleplay. Use them to clarify which layer owns a decision.
+Lich and Vampire outputs are drafts. Lower responsibilities may revise them without routine permission when evidence supports the change. Material consequences must be propagated to affected contracts, tests, dependencies, siblings, and review state. Do not silently drift, but do not lock implementation behind parent approval.
 
-## Spec template
+## Repository consistency
 
-Use `skills/adeptus-necroneerium/templates/spec.md` only when a lightweight spec will reduce ambiguity for Tactical or Adeptus mode work.
+When changing the process, update every affected source of doctrine rather than patching only the installed skill:
 
-Skip the spec for Direct mode tasks where it would become process waste.
+- `README.md`;
+- `docs/manifesto.md`;
+- `docs/charter.md`;
+- `docs/skill-outline.md`;
+- `skills/adeptus-necroneerium/SKILL.md`;
+- relevant role guides and templates;
+- `agents/openai.yaml` when invocation metadata changes.
 
-## Primary principle
+Search for contradictory legacy wording after edits. In particular, the Lich must never be reduced to planning only the next vertical slice, and a local PASS must never imply project completion.
 
-Working code over comprehensive agent artifacts.
+## Working-code discipline
 
-Every output should either:
+Every meaningful process output must become code, tests, embedded contracts, executable validation, compact orchestration state, or a genuine blocker. Avoid long unused plans, repeated restatement, identity setup, review theater, and reports that downstream work does not consume.
 
-- become code,
-- become a test,
-- become an embedded contract or docstring,
-- become an executable validation step,
-- or identify a blocker that prevents code from proceeding.
+Quality and total token efficiency outrank speed. Use the lightest mode appropriate to the invoked task and do not manufacture role or agent boundaries for tiny work.
 
-Avoid ceremonial planning, repeated restatement, long implementation reports, and unused documentation.
+## Review discipline
 
-## Layer model
+Shade must test claims at the boundary being claimed. Generated tests do not prove UI, CLI, API, subprocess, persistence, restart, concurrency, documentation, or cleanup behavior when they bypass that boundary.
 
-Use the layer model only when it helps produce working code.
+Run README commands verbatim. Perform cleanup scans after the final artifact-generating command. State unverified requirements honestly.
 
-### Lich: Strategic topology
-
-Responsible for code topology:
-
-- repository structure,
-- file/module boundaries,
-- dependency direction,
-- public entry points,
-- major data flow.
-
-The Lich should not produce long prose strategy documents. Its output should usually be a compact repo/file shape or a concrete structural patch.
-
-The Lich may push back when the requested goal is unclear, contradictory, too broad, or cannot be decomposed into a useful working-code slice.
-
-### Vampire: Tactical contracts
-
-Responsible for code contracts:
-
-- function signatures,
-- class/dataclass/enum definitions,
-- data contracts,
-- docstrings,
-- expected exceptions,
-- test names and test intent,
-- edge cases.
-
-The Vampire must satisfy the current strategic milestone: no more and no less. Tactical design should be necessary and sufficient for the milestone, not speculative future-proofing.
-
-The Vampire should make implementation easier and safer without overdesigning. It may push back when the milestone is insufficient, overbroad, internally inconsistent, or would require unjustified abstractions.
-
-### Skeleton: Worker implementation
-
-Responsible for implementation:
-
-- fill function bodies,
-- complete tests,
-- add private helpers where justified,
-- wire modules together,
-- run validation,
-- patch failures.
-
-The Skeleton should not silently change public contracts. If a skeleton or contract is wrong, explain the contract change and keep the change local and justified.
-
-The Skeleton may push back when the skeleton or contract cannot be implemented safely with the information provided.
-
-### Shade: Review and backward routing
-
-Responsible for verification:
-
-- confirm tests pass,
-- confirm acceptance criteria are satisfied,
-- check implementation against contracts,
-- check for placeholder code,
-- patch clear failures when possible.
-
-Preferred review output is short: PASS, PASS with trivial notes, FAIL with specific fixes, or BLOCKED with the missing information.
-
-All reviews must classify findings as critical or trivial.
-
-Critical findings block a pass. They must be resolved, explicitly downgraded with justification, or escalated as blocked. Examples include failing tests, unmet acceptance criteria, silent public contract drift, data loss risk, placeholder code, implementation that contradicts the tactical contract, tactical contracts that fail the strategic milestone, or structure that prevents the slice from working.
-
-Trivial findings do not block a pass. They may be noted, deferred, or ignored. Examples include naming preferences, minor readability improvements, non-blocking documentation, or optional refactors.
-
-All passes must include short reasoning. A pass should explain why acceptance criteria are satisfied, why no critical findings remain, and what validation evidence supports the result.
-
-## Backward review flow
-
-Review can move backward, but construction should move forward.
-
-On Shade review failure, classify each critical finding by the lowest responsible layer:
-
-- Skeleton-level failure: implementation bug, missing edge case, placeholder code, failed test, or behavior that does not match the contract.
-- Vampire-level failure: wrong function contract, missing data shape, wrong exception behavior, tests proving the wrong behavior, or over/under-specified skeleton.
-- Lich-level failure: wrong file/module boundary, wrong dependency direction, wrong entry point, or a topology that prevents the vertical slice from working.
-- Requirement-level failure: ambiguous acceptance criteria, conflicting user goals, missing decision, or external blocker.
-
-Route fixes only as far backward as necessary. Do not restart the full process unless the failure truly requires it.
-
-Assign each critical finding a stable ID, parent scope, judged item, and isolated retry counter. Initial construction is attempt 0. The first rejection immediately triggers retry 1; rejection of retry 1 immediately triggers retry 2; rejection of retry 2 stops the entire project with terminal FAIL. Rewording, rerouting, or finding another symptom of the same root defect does not reset the counter.
-
-Scopes are hierarchical and may branch: one Lich scope may govern many Vampire scopes, and one Vampire scope may govern many downstream implementation and Shade-review items. Sibling items have independent counters. Rerun only the affected branch from the responsible layer forward: Skeleton then Shade; Vampire then affected Skeleton and Shade descendants; or Lich then affected Vampire, Skeleton, and Shade descendants. Requirement or external-dependency findings are BLOCKED without consuming implementation retries.
-
-## Cost discipline
-
-Do not reduce cost by truncating useful code, tests, or functions.
-
-Reduce cost by eliminating waste:
-
-- repeated task restatement,
-- agent identity setup,
-- long planning artifacts,
-- unused documentation,
-- review theater,
-- excessive handoffs,
-- full-context reloads,
-- planning detached from executable output.
-
-## Workflow guidance
-
-Prefer vertical slices. A useful slice proves behavior end to end:
-
-1. input,
-2. processing,
-3. output,
-4. test,
-5. validation.
-
-Do not build a huge abstract skeleton before proving any behavior works.
-
-Skip the Adeptus process for tiny fixes. Use direct implementation when the shape is obvious.
-
-Without explicit user invocation, do not escalate into the Adeptus workflow. After invocation, task complexity may determine which mode to use, but it is never itself a trigger.
-
-## Current project status
-
-This repository is in concept/design phase. Do not create a large framework until the smallest useful workflow has been defined and tested on real coding tasks.
+Critical findings keep stable IDs and isolated counters: attempt 0, retry 1 after first rejection, retry 2 after the second, and terminal project FAIL after rejection of retry 2. Recalls and reroutes never reset counters.

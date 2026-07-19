@@ -1,104 +1,107 @@
-# Adeptus Necroneerium Spec
+# Adeptus Necroneerium Working Spec
 
-Use this template only when it helps implementation or review. Skip it for tiny Direct mode work.
+Use this template only when it materially improves implementation, completion accounting, or review. Skip it for Direct mode and small Tactical work.
 
-## Request
+This is compact orchestration state, not a ceremonial design document. Lich and Vampire sections are revisable drafts. User requirements and explicit acceptance gates remain binding.
 
-<!-- Short statement of the requested change. -->
+## Complete request
 
-## Acceptance criteria
+<!-- State the complete requested outcome, including every supplied phase. -->
 
-<!-- Observable outcomes required for the work to pass. -->
+## Binding requirements and acceptance inventory
 
-- 
+<!-- Record observable user requirements, compatibility constraints, and phase gates. -->
+
+| ID | Required outcome | Direct evidence required | State |
+| --- | --- | --- | --- |
+|  |  |  | Pending |
 
 ## Selected mode
 
-<!-- Direct, Tactical, or Adeptus. Explain briefly why. -->
+Mode: <!-- Direct, Tactical, or Adeptus -->
 
-Mode: 
-Reason: 
+Reason: <!-- Explain why the selected hierarchy is proportional to the task. -->
 
-## Current milestone
+## Lich: whole-project strategic draft
 
-<!-- The smallest useful working-code slice. Tactical design must satisfy this milestone, no more and no less. -->
+### Proposed topology
 
-## Non-goals
+<!-- Cover the complete request in breadth: packages, modules, major responsibilities, public seams, and dependency direction. Avoid private implementation detail. -->
 
-<!-- Explicitly list things that should not be built or changed in this slice. -->
+### Cross-scope contracts and risks
 
-- 
+<!-- Record only interfaces, compatibility obligations, and high-risk assumptions that affect more than one Vampire scope. -->
 
-## Lich: strategic topology
+### Vampire scope graph
 
-Use only if structure is not obvious.
+| Scope ID | Tactical subsystem | Dependencies | Acceptance coverage | State |
+| --- | --- | --- | --- | --- |
+| V-1 |  |  |  | Pending |
 
-### Files/modules
+States: Pending, Active, Retired-PASS, Recalled, Invalidated, Blocked, Terminal-FAIL.
 
-<!-- Files to create/change and their responsibility boundaries. -->
+## Active or recalled Vampire: tactical draft
 
-- 
+Scope ID:
 
-### Dependency direction
+Relevant Lich draft revision:
 
-<!-- Any dependency rules needed to keep the slice clean. -->
+### Files, contracts, and tests
 
-## Vampire: tactical contracts
+<!-- Define the subsystem's files or code areas, signatures, schemas, exceptions, behaviors, edge cases, and integration checks. This is guidance and may be revised from implementation evidence. -->
 
-Use only if contracts are needed.
+### Skeleton assignments
 
-### Types / data contracts
+| Item ID | Cohesive implementation unit | Dependencies | Focused validation | State |
+| --- | --- | --- | --- | --- |
+|  |  |  |  | Pending |
 
-<!-- Dataclasses, enums, schemas, payload fields, validation rules. -->
+### Retirement conditions
 
-### Functions / methods
+<!-- State the subsystem behavior and integration evidence required for the Vampire Shade gate to pass. -->
 
-<!-- Signatures, behavior, exceptions, side effects. -->
+## Draft revision and invalidation log
 
-### Tests
+<!-- Record only material changes that affect contracts, dependencies, siblings, passed work, or acceptance coverage. Lower responsibilities do not need permission to make supported changes. -->
 
-<!-- Test names and intent. -->
+| Revision | Evidence/reason | Draft changed | Affected work | Required revalidation |
+| --- | --- | --- | --- | --- |
+|  |  |  |  |  |
 
-- 
+## Shade review gates
 
-## Skeleton: implementation plan
+### Skeleton evidence
 
-<!-- Concrete implementation notes. Keep this code-adjacent; do not write a prose plan if code is clearer. -->
+<!-- Compact direct evidence for each completed Skeleton item. -->
 
-## Validation plan
+### Vampire integration evidence
 
-<!-- Commands or checks required to verify the work. -->
+<!-- Direct evidence required before retiring the active Vampire. -->
 
-- 
+### Phase and project evidence
 
-## Shade: review route
+<!-- Full acceptance coverage, real boundary checks, exact test totals, README commands, documentation audit, and final cleanup. -->
 
-### Critical findings
+## Finding and recall ledger
 
-<!-- Must be resolved, downgraded with justification, or escalated. -->
+Initial judged work is attempt 0. First rejection triggers retry 1; rejection of retry 1 triggers retry 2; rejection after retry 2 terminates the project. Never pool or reset counters.
 
-- 
-
-### Trivial findings
-
-<!-- Non-blocking notes only. -->
-
-- 
-
-### Finding repair ledger
-
-<!-- Keep one stable row per critical finding. Initial work is attempt 0; first rejection triggers retry 1. -->
-
-| Scope path | Finding ID | Judged item / acceptance criterion | Responsible layer | Triggered retry | Retry result | Status |
+| Scope path | Finding ID | Judged item and root defect | Responsible level | Triggered retry | Affected descendants/seams | Status |
 | --- | --- | --- | --- | --- | --- | --- |
 |  |  |  |  |  |  |  |
 
-First rejection triggers retry 1; rejection of retry 1 triggers retry 2; rejection of retry 2 terminates the entire project as FAIL. Do not pool counters across parent, child, sibling, or unrelated findings. Rerun only the affected descendant branch.
+For a Vampire recall, preserve the scope ID, relevant drafts, finding identity, retry state, invalidated passes, unaffected siblings, and retirement conditions.
 
-### Final outcome
+## Completion state
 
-<!-- PASS, FAIL, or BLOCKED. Pass requires short reasoning and validation evidence. -->
+Completed acceptance IDs:
 
-Outcome: 
-Reasoning: 
-Validation evidence: 
+Remaining acceptance IDs:
+
+Next dependency-ready scope/item:
+
+Invalidated work awaiting revalidation:
+
+Current outcome: <!-- IN PROGRESS, PASS, BLOCKED, or TERMINAL FAIL -->
+
+Project PASS is forbidden while a binding acceptance item, required Vampire scope, phase gate, or project gate remains incomplete.
