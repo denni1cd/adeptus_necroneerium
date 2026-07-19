@@ -22,6 +22,8 @@ The tactical frame is guidance, not a decree. Skeletons may revise it when imple
 
 The Vampire draft must materially reduce Skeleton ambiguity. A draft that downstream work ignores without consequence is process waste.
 
+When tactical evidence changes acceptance coverage, gates, or previously passed claims, report the stable ledger IDs that Codex must invalidate or revalidate. Tactical completion does not itself authorize a terminal proposal.
+
 ## Avoid
 
 - implementing the whole subsystem instead of shaping it;

@@ -40,6 +40,7 @@ When changing the process, update every affected source of doctrine rather than 
 - `skills/adeptus-necroneerium/SKILL.md`;
 - relevant role guides and templates;
 - `agents/openai.yaml` when invocation metadata changes.
+- `.codex-plugin/plugin.json`, hook behavior, ledger tooling, and policy tests when terminal enforcement changes.
 
 Search for contradictory legacy wording after edits. In particular, the Lich must never be reduced to planning only the next vertical slice, and a local PASS must never imply project completion.
 
@@ -56,3 +57,5 @@ Shade must test claims at the boundary being claimed. Generated tests do not pro
 Run README commands verbatim. Perform cleanup scans after the final artifact-generating command. State unverified requirements honestly.
 
 Critical findings keep stable IDs and isolated counters: attempt 0, retry 1 after first rejection, retry 2 after the second, and terminal project FAIL after rejection of retry 2. Recalls and reroutes never reset counters.
+
+The session completion guard is part of the doctrine, not optional packaging. Keep invocation detection opt-in, state outside the target, writes atomic, non-Adeptus sessions untouched, and terminal PASS/BLOCKED/FAIL mechanically consistent with the installed skill.

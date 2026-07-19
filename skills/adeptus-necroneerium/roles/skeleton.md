@@ -36,6 +36,6 @@ Changing a draft is not automatically a retry. Shade rejection of a judged resul
 
 Provide changed files, focused validation commands and results, material draft changes, affected consumers, remaining uncertainty, and any trivial notes. Keep the handoff compact.
 
-On PASS, Codex schedules the next known ready Skeleton item directly. Do not return to Vampire or Lich merely to ask what is already recorded in the current scope state.
+On PASS, Codex records direct evidence against affected ledger IDs and schedules the next known ready Skeleton item directly. Do not return to Vampire or Lich merely to ask what is already recorded in the current scope state.
 
 On a routed retry, repair only the stable finding and affected work, preserve the counter, and rerun the implicated Shade gate.

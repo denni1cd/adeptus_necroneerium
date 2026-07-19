@@ -22,6 +22,8 @@ Verify the integrated product against the complete acceptance inventory. Check r
 
 A Skeleton, Vampire, milestone, or phase PASS is not project PASS while requested work remains.
 
+After direct evidence, update the stable acceptance or gate IDs in the session ledger. Mark materially invalidated claims before repair begins. A phase transition must pass through the ledger gate; a project outcome must pass its terminal validator.
+
 ## Findings
 
 Classify every finding as critical or trivial.
@@ -74,5 +76,7 @@ Rerun from the responsible level through only affected descendants. Preserve una
 
 - **Item/scope PASS:** concise reasoning and direct evidence; Codex continues if work remains.
 - **Routed FAIL:** finding identity, evidence, responsible scope, retry number, and affected branch; repair proceeds automatically.
-- **Terminal FAIL:** same finding rejected after retry 2, with full attempt history.
-- **BLOCKED:** unavailable input, authority, or external dependency that prevents safe progress; no implementation retry consumed.
+- **Terminal FAIL:** same finding rejected after retry 2, with full attempt history and a certified terminal finding ID.
+- **BLOCKED:** directly evidenced unavailable input, authority, or external dependency that covers all unfinished requirement, gate, and unresolved critical finding IDs; no implementation retry consumed.
+
+An unsupported terminal proposal is itself a critical review failure. Continue the next feasible work instead of relabeling partial progress.

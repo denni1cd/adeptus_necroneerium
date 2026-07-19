@@ -6,13 +6,15 @@ Codex completes a substantial coding request by orchestrating one whole-project 
 
 ## Invocation and modes
 
-The skill is strictly opt-in. After explicit invocation, choose the lightest safe mode:
+The plugin and skill are strictly opt-in. After explicit invocation, a session completion ledger is activated and Codex chooses the lightest safe mode:
 
 - **Direct:** obvious bounded implementation and direct validation.
 - **Tactical:** one Vampire scope with one or more Skeleton assignments and Shade gates.
 - **Adeptus:** one Lich, multiple Vampire scopes as warranted, nested Skeleton work, recalls, phase gates, and final integrated review.
 
 Do not force Adeptus mode onto work whose risk does not justify the hierarchy.
+
+The completion ledger is mandatory in every mode once the plugin guard activates. Direct and Tactical modes use a proportionally small inventory. Adeptus mode also maintains the full hierarchy and dependency state.
 
 ## Authority model
 
@@ -116,6 +118,8 @@ Only the affected branch reruns:
 
 Large Adeptus runs maintain compact orchestration state containing the complete acceptance inventory, Lich draft revision, Vampire graph, active Skeleton assignments, invalidated work, Shade findings, and retry histories.
 
+The plugin session ledger is the terminal projection of that state. It is initialized before target writes, stored outside the target, and updated after direct evidence or material invalidation. Passing a phase gate requires evidence and advancing to a later phase is rejected while current-phase acceptance remains incomplete.
+
 The following are nonterminal while requested work remains:
 
 - working vertical slice;
@@ -127,8 +131,10 @@ The following are nonterminal while requested work remains:
 Project terminal outcomes are:
 
 - PASS after every binding item and gate passes;
-- BLOCKED for genuinely unavailable input, authority, or dependency;
+- BLOCKED for genuinely unavailable input, authority, or dependency covering all unfinished work and unresolved critical findings;
 - terminal FAIL after rejection of retry 2 for one stable finding.
+
+Before final output, Codex proposes one of those outcomes through the ledger tool. The Stop hook permits it only when the corresponding records satisfy the policy; otherwise it supplies a continuation reason and starts another turn. State changes invalidate an earlier terminal proposal. Explicit user abort is the only voluntary cancellation path.
 
 ## Evidence standards
 

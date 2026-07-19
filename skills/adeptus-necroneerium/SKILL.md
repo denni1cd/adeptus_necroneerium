@@ -1,6 +1,6 @@
 ---
 name: adeptus-necroneerium
-description: Strictly on-demand coding workflow for large or structurally complex implementation tasks. Use only when the user explicitly requests Adeptus Necroneerium, writes adeptus_necroneerium, or invokes @adeptus-necroneerium. Codex orchestrates one whole-project Lich draft, multiple Vampire tactical scopes, bounded Skeleton implementation assignments, and evidence-based Shade review with backward routing and isolated retries.
+description: Strictly on-demand coding workflow for large or structurally complex implementation tasks. Use only when the user explicitly requests Adeptus Necroneerium, writes adeptus_necroneerium, or invokes @adeptus-necroneerium. Codex orchestrates one whole-project Lich draft, multiple Vampire tactical scopes, bounded Skeleton implementation assignments, evidence-based Shade review, and mechanically guarded terminal conditions.
 ---
 
 # Adeptus Necroneerium
@@ -13,9 +13,46 @@ The goal is fewer user reprompts, less architectural drift, less rework, and mor
 
 ## Invocation boundary
 
-This skill is strictly opt-in. Run it only when the user explicitly requests Adeptus Necroneerium by name, writes `adeptus_necroneerium`, or invokes `@adeptus-necroneerium`.
+This skill is strictly opt-in. Run it only when the user explicitly requests Adeptus Necroneerium by name, writes `adeptus_necroneerium`, or invokes `@adeptus-necroneerium`. The native `$adeptus-necroneerium` form is equivalent.
 
 Never self-invoke based on complexity, file count, ambiguity, prior drift, or a failed direct attempt. Those traits affect mode selection only after explicit invocation.
+
+## Mechanical completion guard
+
+The installed plugin activates a session-scoped ledger on explicit invocation. Hook context supplies absolute paths for the ledger and `adeptus_state.py`. This state belongs to plugin data, not the target repository.
+
+After read-only preflight and whole-request inspection, but before target writes:
+
+1. Build the complete binding acceptance inventory, including every requested phase and gate.
+2. Write a temporary inventory JSON object with `request_title`, `current_phase`, `acceptance`, `phase_gates`, and optional `lich_revision` and `vampire_scopes`.
+3. Give every acceptance and gate record a unique stable `id`, observable `description`, optional `phase`, `state` (initially `pending`), and `evidence` list.
+4. Initialize the injected ledger:
+
+```text
+python <adeptus-state-script> init --state <session-ledger> --inventory <inventory-json>
+```
+
+Keep it current with the tool rather than editing it by hand:
+
+```text
+python <adeptus-state-script> set-item --state <session-ledger> --id <id> --status passed --evidence <direct-result>
+python <adeptus-state-script> set-gate --state <session-ledger> --id <id> --status passed --evidence <direct-result>
+python <adeptus-state-script> advance-phase --state <session-ledger> --gate <gate-id> --to <next-phase>
+```
+
+Use `record-finding --help` and `record-blocker --help` for routed failures and genuine external blockers. Finding IDs and attempt evidence are immutable across retries. A blocker must be external, directly evidenced, name an unblock action, and cover every unfinished acceptance or gate ID plus every unresolved critical finding ID.
+
+Immediately before final output, propose exactly one terminal outcome:
+
+```text
+python <adeptus-state-script> propose --state <session-ledger> --outcome PASS
+python <adeptus-state-script> propose --state <session-ledger> --outcome BLOCKED --blocker-id <id>
+python <adeptus-state-script> propose --state <session-ledger> --outcome FAIL --finding-id <id>
+```
+
+An invalid proposal exits nonzero and is nonterminal. Any later ledger mutation invalidates a prior proposal. The Stop hook also rechecks the state: it permits final output only for a certified outcome and otherwise supplies a continuation reason for the next turn.
+
+The user may explicitly end an active run with `@adeptus-necroneerium abort`. Hook unavailability or corruption is not permission to improvise a terminal claim; either repair it before target work or report the genuine external limitation without writing the target.
 
 ## Prime directive
 
@@ -232,7 +269,7 @@ Upstream repair is intentionally more expensive because it invalidates more down
 
 ## Orchestration state and completion accounting
 
-For Adeptus mode, Codex maintains a compact acceptance inventory and hierarchical work state containing:
+For Adeptus mode, Codex maintains compact hierarchical work state linked to the mandatory session completion ledger. Together they contain:
 
 - the complete requested outcomes and binding gates;
 - the current Lich draft revision;
@@ -241,13 +278,13 @@ For Adeptus mode, Codex maintains a compact acceptance inventory and hierarchica
 - invalidated work requiring revalidation;
 - Shade findings and isolated retry histories.
 
-Use existing planning state when sufficient. Create a temporary or repository artifact only when it materially prevents state loss on a long task, and do not ship ceremonial process debris with the product.
+The plugin ledger is mandatory and remains outside the target. Use existing planning state for richer Lich, Vampire, and Skeleton detail when sufficient. Create another temporary or repository artifact only when it materially prevents state loss, and do not ship ceremonial process debris with the product.
 
 When one item passes, schedule the next known ready item. Do not ask a parent responsibility a question whose answer is already in the current work state.
 
 If requested work remains but no scope is ready, diagnose a dependency deadlock, missing decomposition, or external blocker. Do not silently stop.
 
-Project PASS is allowed only when every binding acceptance item and required phase/project gate has passed. Otherwise report a genuine BLOCKED state or terminal retry failure; never present an honest partial foundation as completion.
+Project PASS is allowed only when every binding acceptance item and required phase/project gate has passed with evidence and the ledger certifies PASS. Otherwise continue, certify a genuine BLOCKED state, or certify terminal retry failure; never present an honest partial foundation as completion.
 
 ## Token discipline
 
@@ -279,11 +316,11 @@ Include stable finding ID, scope path, judged item, root defect, responsible lev
 
 ### Terminal FAIL
 
-Use only when the same finding remains rejected after retry 2. Include its complete attempt history and stop the project.
+Use only when the same finding remains rejected after retry 2 and the ledger certifies FAIL. Include its complete attempt history and stop the project.
 
 ### BLOCKED
 
-Use only when progress requires unavailable user input, authority, or an external dependency. Include what is missing, why safe progress cannot continue, and the narrowest action that would unblock it.
+Use only when progress requires unavailable user input, authority, or an external dependency and the ledger certifies that it covers all unfinished work. Include what is missing, direct evidence, why safe progress cannot continue, and the narrowest action that would unblock it.
 
 ## Anti-patterns
 

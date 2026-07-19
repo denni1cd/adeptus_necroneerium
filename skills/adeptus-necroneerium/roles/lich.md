@@ -15,8 +15,11 @@ The draft guides downstream Vampire scopes but is not an immutable requirement.
 - multiple coherent Vampire scopes when the work warrants them;
 - dependencies, phase gates, and likely activation order;
 - high-risk assumptions that need early executable evidence.
+- a stable-ID acceptance and phase-gate inventory suitable for the session completion ledger.
 
 Keep this frame shallow enough to avoid predicting private implementation detail that belongs to Vampires and Skeletons.
+
+Codex initializes the mechanical ledger from this breadth-complete inventory before target writes. A later strategic revision must invalidate and revalidate affected ledger records; it must not silently remove a binding item.
 
 ## Draft semantics
 

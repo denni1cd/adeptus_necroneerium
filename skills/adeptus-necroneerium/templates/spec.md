@@ -4,6 +4,8 @@ Use this template only when it materially improves implementation, completion ac
 
 This is compact orchestration state, not a ceremonial design document. Lich and Vampire sections are revisable drafts. User requirements and explicit acceptance gates remain binding.
 
+The plugin's session completion ledger is mandatory and separate from this optional human-readable template. Use the same stable acceptance and gate IDs in both. The ledger path and state-tool path arrive through hook context; keep both outside the delivered target.
+
 ## Complete request
 
 <!-- State the complete requested outcome, including every supplied phase. -->
@@ -105,3 +107,5 @@ Invalidated work awaiting revalidation:
 Current outcome: <!-- IN PROGRESS, PASS, BLOCKED, or TERMINAL FAIL -->
 
 Project PASS is forbidden while a binding acceptance item, required Vampire scope, phase gate, or project gate remains incomplete.
+
+Before final output, run the state tool's `propose` command. PASS requires every table ID to carry direct evidence; BLOCKED requires an evidenced external blocker covering every unfinished requirement, gate, and unresolved critical finding ID; terminal FAIL requires one stable finding evidenced at attempt 0, retry 1, and retry 2.

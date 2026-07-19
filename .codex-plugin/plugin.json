@@ -1,0 +1,21 @@
+{
+  "name": "adeptus-necroneerium",
+  "version": "0.1.0",
+  "description": "Hierarchical coding orchestration with evidence-gated completion enforcement.",
+  "author": {
+    "name": "denni1cd",
+    "url": "https://github.com/denni1cd"
+  },
+  "repository": "https://github.com/denni1cd/adeptus_necroneerium",
+  "license": "MIT",
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Adeptus Necroneerium",
+    "shortDescription": "Evidence-gated hierarchical coding orchestration",
+    "longDescription": "Orchestrates substantial coding work through a layered hierarchy and mechanically prevents unsupported PASS, BLOCKED, or terminal FAIL outcomes.",
+    "developerName": "denni1cd",
+    "category": "Productivity",
+    "capabilities": [],
+    "defaultPrompt": "Use @adeptus-necroneerium to complete this substantial coding task."
+  }
+}

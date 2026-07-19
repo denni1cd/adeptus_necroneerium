@@ -1,6 +1,6 @@
 # Adeptus Necroneerium
 
-Adeptus Necroneerium is a strictly on-demand Codex coding skill for completing substantial software requests through hierarchical, revisable code drafts and evidence-based review.
+Adeptus Necroneerium is a strictly on-demand Codex plugin and coding skill for completing substantial software requests through hierarchical, revisable code drafts and evidence-based review.
 
 It exists to test whether a structured run can deliver better quality, evolvability, review honesty, and total token efficiency than plain Codex—especially by reducing architectural drift, rework, false PASS claims, and user reprompting.
 
@@ -8,7 +8,7 @@ The canonical project doctrine and hierarchy diagram are in [the manifesto](docs
 
 ## Invocation
 
-The skill must never activate implicitly. Use it only when the user explicitly requests Adeptus Necroneerium, writes `adeptus_necroneerium`, or invokes `@adeptus-necroneerium`.
+The skill must never activate implicitly. Use it only when the user explicitly requests Adeptus Necroneerium, writes `adeptus_necroneerium`, or invokes `@adeptus-necroneerium` (the native `$adeptus-necroneerium` form is also recognized).
 
 The registered skill name is `adeptus-necroneerium`; the repository and prompt alias may use `adeptus_necroneerium`.
 
@@ -30,6 +30,18 @@ Lich and Vampire outputs guide downstream work but are not immutable requirement
 Material changes must be propagated to affected contracts, tests, dependencies, siblings, and validation state. User requirements, explicit acceptance criteria, safety constraints, and phase gates remain binding.
 
 A normal draft revision is not a retry. Shade rejection of a critical judged finding begins its isolated retry sequence.
+
+## Mechanical completion guard
+
+The plugin packages a session-scoped completion ledger and [Codex Stop hook](https://learn.chatgpt.com/docs/hooks). Explicit invocation activates the guard. The hook adds the ledger and state-tool paths to Codex context before target writes and rejects a final response until one of these conditions is mechanically evidenced:
+
+- **PASS:** every binding acceptance item and required phase gate is passed with direct evidence, with no unresolved critical finding or open blocker;
+- **BLOCKED:** a recorded open external blocker covers every unfinished item and unresolved critical finding, and names the narrowest unblock action;
+- **FAIL:** the same stable critical finding has evidenced rejections at attempt 0, retry 1, and retry 2.
+
+An ordinary Codex session creates no ledger and its Stop event is untouched. Active state lives under the plugin data directory, not in the target repository. A successful terminal check seals that session ledger. The user can explicitly cancel a run with `@adeptus-necroneerium abort`; disabling the hook through `/hooks` is the administrative escape hatch.
+
+The hook is a lifecycle guard, not a substitute for implementation judgment. Codex still has to construct the complete acceptance inventory, update it honestly, execute work, and gather direct evidence. Hook source should be reviewed before enabling the plugin, as with any executable repository content.
 
 ## Forward construction and backward review
 
@@ -70,6 +82,21 @@ Do not save tokens by omitting necessary code, tests, or verification. Save them
 - `docs/manifesto.md`: project doctrine and hierarchy diagram.
 - `docs/charter.md`: purpose, boundaries, and success criteria.
 - `docs/skill-outline.md`: design reference for the nested lifecycle.
+- `.codex-plugin/plugin.json`: plugin manifest.
+- `hooks/hooks.json` and `hooks/adeptus_hook.py`: opt-in activation and terminal enforcement.
+- `scripts/adeptus_state.py`: atomic ledger updates and terminal-policy validation.
+- `tests/test_completion_guard.py`: executable policy and hook tests.
+
+## Development verification
+
+From the repository root, run:
+
+```text
+python3 -m unittest discover -s tests -v
+python3 -m compileall -q hooks scripts tests
+```
+
+On Windows, `py -3` may replace `python3`. Plugin maintainers should also run the current plugin and skill validators supplied with their Codex development environment.
 
 ## Success criterion
 
