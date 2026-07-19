@@ -43,6 +43,8 @@ An ordinary Codex session creates no ledger and its Stop event is untouched. Act
 
 Installing or enabling the plugin does not automatically trust its executable hooks. After each new or changed hook definition, open `/hooks`, review both plugin-bundled hooks, and explicitly trust them before starting the test in a new thread. Codex skips an untrusted hook, so an invocation is not proven active unless the injected context names the session ledger and state tool. A successful activation also writes `activation-receipt.json` beside the session ledger in the plugin data directory for diagnosis outside the target.
 
+Before an expensive run, submit exactly `@adeptus-necroneerium probe` in a disposable fresh thread. A working `UserPromptSubmit` hook injects `ADEPTUS COMPLETION GUARD PROBE PASSED`, writes a probe receipt in plugin data, and deliberately leaves the completion ledger and Stop guard inactive. If that message is absent, inspect `/hooks` rather than starting product work.
+
 The hook is a lifecycle guard, not a substitute for implementation judgment. Codex still has to construct the complete acceptance inventory, update it honestly, execute work, and gather direct evidence. Hook source should be reviewed before enabling the plugin, as with any executable repository content.
 
 ## Forward construction and backward review

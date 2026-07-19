@@ -217,10 +217,12 @@ class TerminalPolicyTests(unittest.TestCase):
 
 
 class StopHookPrototypeTests(unittest.TestCase):
-    def run_hook(self, plugin_data: str, payload: dict[str, object]) -> dict[str, object]:
+    def run_hook_process(
+        self, plugin_data: str, payload: dict[str, object]
+    ) -> subprocess.CompletedProcess[str]:
         environment = os.environ.copy()
         environment.update({"PLUGIN_ROOT": str(ROOT), "PLUGIN_DATA": plugin_data})
-        result = subprocess.run(
+        return subprocess.run(
             [sys.executable, str(ROOT / "hooks" / "adeptus_hook.py")],
             input=json.dumps(payload),
             text=True,
@@ -228,16 +230,14 @@ class StopHookPrototypeTests(unittest.TestCase):
             env=environment,
             check=True,
         )
-        return json.loads(result.stdout)
 
-    def user_prompt_context(self, result: dict[str, object]) -> str:
-        self.assertEqual(set(result), {"hookSpecificOutput"})
-        output = result["hookSpecificOutput"]
-        self.assertIsInstance(output, dict)
-        self.assertEqual(output.get("hookEventName"), "UserPromptSubmit")
-        context = output.get("additionalContext")
-        self.assertIsInstance(context, str)
-        return context
+    def run_hook_json(
+        self, plugin_data: str, payload: dict[str, object]
+    ) -> dict[str, object]:
+        return json.loads(self.run_hook_process(plugin_data, payload).stdout)
+
+    def run_hook_text(self, plugin_data: str, payload: dict[str, object]) -> str:
+        return self.run_hook_process(plugin_data, payload).stdout.strip()
 
     def test_stop_hook_blocks_then_allows_a_certified_pass(self) -> None:
         with tempfile.TemporaryDirectory() as plugin_data:
@@ -252,20 +252,20 @@ class StopHookPrototypeTests(unittest.TestCase):
             )
             save_state(path, state)
             payload = {"hook_event_name": "Stop", "session_id": "s-1", "cwd": "/target"}
-            blocked = self.run_hook(plugin_data, payload)
+            blocked = self.run_hook_json(plugin_data, payload)
             self.assertEqual(blocked["decision"], "block")
 
             state["acceptance"][0].update(
                 {"state": "passed", "evidence": ["direct boundary check exited 0"]}
             )
             save_state(path, state)
-            allowed = self.run_hook(plugin_data, payload)
+            allowed = self.run_hook_json(plugin_data, payload)
             self.assertEqual(allowed, {})
             self.assertFalse(json.loads(path.read_text(encoding="utf-8"))["active"])
 
     def test_non_adeptus_stop_is_untouched(self) -> None:
         with tempfile.TemporaryDirectory() as plugin_data:
-            result = self.run_hook(
+            result = self.run_hook_json(
                 plugin_data,
                 {"hook_event_name": "Stop", "session_id": "ordinary", "cwd": "/target"},
             )
@@ -282,7 +282,7 @@ class StopHookPrototypeTests(unittest.TestCase):
                 }
             )
             save_state(path, state)
-            result = self.run_hook(
+            result = self.run_hook_json(
                 plugin_data,
                 {
                     "hook_event_name": "Stop",
@@ -296,7 +296,7 @@ class StopHookPrototypeTests(unittest.TestCase):
 
     def test_explicit_invocation_activates_but_discussion_does_not(self) -> None:
         with tempfile.TemporaryDirectory() as plugin_data:
-            discussion = self.run_hook(
+            discussion = self.run_hook_json(
                 plugin_data,
                 {
                     "hook_event_name": "UserPromptSubmit",
@@ -306,7 +306,7 @@ class StopHookPrototypeTests(unittest.TestCase):
                 },
             )
             self.assertEqual(discussion, {})
-            invocation = self.run_hook(
+            invocation = self.run_hook_text(
                 plugin_data,
                 {
                     "hook_event_name": "UserPromptSubmit",
@@ -315,8 +315,7 @@ class StopHookPrototypeTests(unittest.TestCase):
                     "prompt": "Use @adeptus-necroneerium to implement the request.",
                 },
             )
-            context = self.user_prompt_context(invocation)
-            self.assertIn("ADEPTUS COMPLETION GUARD IS ACTIVE", context)
+            self.assertIn("ADEPTUS COMPLETION GUARD IS ACTIVE", invocation)
             state_path = session_state_path(plugin_data, "invoked")
             self.assertTrue(state_path.exists())
             receipt_path = state_path.with_name("activation-receipt.json")
@@ -331,12 +330,14 @@ class StopHookPrototypeTests(unittest.TestCase):
                 "session_id": "abortable",
                 "cwd": "/target",
             }
-            self.run_hook(plugin_data, {**common, "prompt": "adeptus_necroneerium build it"})
-            aborted = self.run_hook(
+            self.run_hook_text(
+                plugin_data, {**common, "prompt": "adeptus_necroneerium build it"}
+            )
+            aborted = self.run_hook_text(
                 plugin_data, {**common, "prompt": "@adeptus-necroneerium abort"}
             )
-            self.assertIn("explicitly aborted", self.user_prompt_context(aborted))
-            stopped = self.run_hook(
+            self.assertIn("explicitly aborted", aborted)
+            stopped = self.run_hook_json(
                 plugin_data,
                 {"hook_event_name": "Stop", "session_id": "abortable", "cwd": "/target"},
             )
@@ -347,12 +348,31 @@ class StopHookPrototypeTests(unittest.TestCase):
             path = session_state_path(plugin_data, "corrupt")
             path.parent.mkdir(parents=True)
             path.write_text("{not json", encoding="utf-8")
-            result = self.run_hook(
+            result = self.run_hook_json(
                 plugin_data,
                 {"hook_event_name": "Stop", "session_id": "corrupt", "cwd": "/target"},
             )
             self.assertEqual(result["decision"], "block")
             self.assertIn("unreadable", result["reason"])
+
+    def test_probe_proves_context_delivery_without_activating_stop_guard(self) -> None:
+        with tempfile.TemporaryDirectory() as plugin_data:
+            payload = {
+                "hook_event_name": "UserPromptSubmit",
+                "session_id": "probe-only",
+                "cwd": "/target",
+                "prompt": "@adeptus-necroneerium probe",
+            }
+            output = self.run_hook_text(plugin_data, payload)
+            self.assertIn("ADEPTUS COMPLETION GUARD PROBE PASSED", output)
+            state_path = session_state_path(plugin_data, "probe-only")
+            self.assertFalse(state_path.exists())
+            self.assertTrue(state_path.with_name("probe-receipt.json").exists())
+            stopped = self.run_hook_json(
+                plugin_data,
+                {"hook_event_name": "Stop", "session_id": "probe-only", "cwd": "/target"},
+            )
+            self.assertEqual(stopped, {})
 
     def test_packaged_platform_hook_command_executes_verbatim(self) -> None:
         configuration = json.loads(
@@ -380,11 +400,7 @@ class StopHookPrototypeTests(unittest.TestCase):
                 shell=True,
                 check=True,
             )
-            output = json.loads(result.stdout)
-            self.assertIn(
-                "ADEPTUS COMPLETION GUARD IS ACTIVE",
-                self.user_prompt_context(output),
-            )
+            self.assertIn("ADEPTUS COMPLETION GUARD IS ACTIVE", result.stdout)
 
 
 class StateCliTests(unittest.TestCase):

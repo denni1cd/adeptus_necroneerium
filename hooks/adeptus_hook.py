@@ -33,6 +33,10 @@ ABORT = re.compile(
     r"^\s*(?:[@$]adeptus-necroneerium|adeptus_necroneerium)\s+abort\s*[.!]?\s*$",
     re.IGNORECASE,
 )
+PROBE = re.compile(
+    r"^\s*(?:[@$]adeptus-necroneerium|adeptus_necroneerium)\s+probe\s*[.!]?\s*$",
+    re.IGNORECASE,
+)
 
 
 def _emit(value: dict[str, Any]) -> None:
@@ -40,14 +44,10 @@ def _emit(value: dict[str, Any]) -> None:
     sys.stdout.write("\n")
 
 
-def _user_prompt_context(message: str) -> dict[str, Any]:
-    """Return the current Codex UserPromptSubmit context envelope."""
-    return {
-        "hookSpecificOutput": {
-            "hookEventName": "UserPromptSubmit",
-            "additionalContext": message,
-        }
-    }
+def _emit_context(message: str) -> None:
+    """Emit plain UserPromptSubmit text as Codex developer context."""
+    sys.stdout.write(message)
+    sys.stdout.write("\n")
 
 
 def _read_input() -> dict[str, Any]:
@@ -68,28 +68,44 @@ def _state_path(payload: dict[str, Any]) -> Path | None:
 def on_user_prompt(payload: dict[str, Any]) -> None:
     prompt = payload.get("prompt", "")
     state_path = _state_path(payload)
+    if isinstance(prompt, str) and PROBE.match(prompt):
+        receipt_text = "Plugin data or session identity was unavailable."
+        if state_path is not None:
+            receipt_path = state_path.with_name("probe-receipt.json")
+            save_state(
+                receipt_path,
+                {
+                    "event": "UserPromptSubmit",
+                    "probe_passed": True,
+                    "session_id": payload["session_id"],
+                },
+            )
+            receipt_text = f"Probe receipt: {receipt_path}."
+        _emit_context(
+            "ADEPTUS COMPLETION GUARD PROBE PASSED. The UserPromptSubmit hook "
+            f"executed and its output reached Codex. {receipt_text} This probe did not "
+            "activate a completion ledger or Stop enforcement. Do not execute target "
+            "work; report the probe result only."
+        )
+        return
     if isinstance(prompt, str) and ABORT.match(prompt) and state_path is not None:
         if state_path.exists():
             state = load_state(state_path)
             state["active"] = False
             state["user_cancelled"] = True
             save_state(state_path, state)
-        _emit(
-            _user_prompt_context(
-                "The user explicitly aborted the active Adeptus run. The completion "
-                "guard is disabled for this session until a new explicit invocation."
-            )
+        _emit_context(
+            "The user explicitly aborted the active Adeptus run. The completion "
+            "guard is disabled for this session until a new explicit invocation."
         )
         return
     if not isinstance(prompt, str) or not INVOCATION.search(prompt):
         _emit({})
         return
     if state_path is None:
-        _emit(
-            _user_prompt_context(
-                "Adeptus invocation detected, but its session completion state "
-                "could not be created. Do not begin target writes; report this hook failure."
-            )
+        _emit_context(
+            "Adeptus invocation detected, but its session completion state "
+            "could not be created. Do not begin target writes; report this hook failure."
         )
         return
     if state_path.exists():
@@ -111,15 +127,13 @@ def on_user_prompt(payload: dict[str, Any]) -> None:
             "state_tool_path": str(PLUGIN_ROOT / "scripts" / "adeptus_state.py"),
         },
     )
-    _emit(
-        _user_prompt_context(
-            "ADEPTUS COMPLETION GUARD IS ACTIVE. Its session ledger is "
-            f"{state_path}, and its activation receipt is {receipt_path}. Before target "
-            "writes, initialize the binding acceptance inventory with "
-            f"{PLUGIN_ROOT / 'scripts' / 'adeptus_state.py'}. Keep it current as evidence, "
-            "gates, findings, and blockers change. A Stop hook will reject final output "
-            "unless PASS, BLOCKED, or terminal FAIL is mechanically justified by that ledger."
-        )
+    _emit_context(
+        "ADEPTUS COMPLETION GUARD IS ACTIVE. Its session ledger is "
+        f"{state_path}, and its activation receipt is {receipt_path}. Before target "
+        "writes, initialize the binding acceptance inventory with "
+        f"{PLUGIN_ROOT / 'scripts' / 'adeptus_state.py'}. Keep it current as evidence, "
+        "gates, findings, and blockers change. A Stop hook will reject final output "
+        "unless PASS, BLOCKED, or terminal FAIL is mechanically justified by that ledger."
     )
 
 
@@ -186,11 +200,9 @@ def main() -> None:
                 }
             )
         else:
-            _emit(
-                _user_prompt_context(
-                    "Adeptus completion guard could not activate safely. Do not begin "
-                    f"target writes. Repair the guard or report the external limitation. Error: {error}"
-                )
+            _emit_context(
+                "Adeptus completion guard could not activate safely. Do not begin "
+                f"target writes. Repair the guard or report the external limitation. Error: {error}"
             )
 
 
