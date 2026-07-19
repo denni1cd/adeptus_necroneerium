@@ -339,11 +339,13 @@ class StopHookPrototypeTests(unittest.TestCase):
             self.assertEqual(result["decision"], "block")
             self.assertIn("unreadable", result["reason"])
 
-    def test_packaged_posix_hook_command_executes_verbatim(self) -> None:
+    def test_packaged_platform_hook_command_executes_verbatim(self) -> None:
         configuration = json.loads(
             (ROOT / "hooks" / "hooks.json").read_text(encoding="utf-8")
         )
-        command = configuration["hooks"]["UserPromptSubmit"][0]["hooks"][0]["command"]
+        hook = configuration["hooks"]["UserPromptSubmit"][0]["hooks"][0]
+        command_key = "commandWindows" if os.name == "nt" else "command"
+        command = hook[command_key]
         with tempfile.TemporaryDirectory() as plugin_data:
             environment = os.environ.copy()
             environment.update({"PLUGIN_ROOT": str(ROOT), "PLUGIN_DATA": plugin_data})
