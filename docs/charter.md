@@ -12,8 +12,8 @@ The project provides a strictly on-demand Codex plugin and skill. It is not a co
 
 Codex is always the orchestrator. Named roles describe responsibility:
 
-- one Lich for the complete strategic project draft;
-- multiple Vampire scopes for coherent tactical subsystems;
+- one Lich for the complete strategic project draft and strategic-resolution code;
+- multiple Vampire scopes for coherent tactical subsystems and executable contract skeletons;
 - multiple Skeleton assignments within each Vampire scope;
 - Shade review at implementation, subsystem, phase, and project resolution.
 
@@ -29,8 +29,6 @@ Codex is always the orchestrator. Named roles describe responsibility:
 - A local or phase PASS is not project PASS while requested work remains.
 - Shade verifies real boundaries, routes failures backward, and may recall retired Vampires.
 - Critical findings have stable identities and isolated two-retry budgets.
-- A session-scoped Stop hook mechanically enforces terminal conditions after explicit invocation.
-- Completion state is atomic, fails closed, and remains outside the target repository.
 - Quality and total token efficiency outrank speed and maximum concurrency.
 - The skill remains strictly opt-in.
 
@@ -38,7 +36,7 @@ Codex is always the orchestrator. Named roles describe responsibility:
 
 The responsibility model is a tree: one Lich, many Vampires, and many Skeleton assignments under each Vampire. The implementation model may be a dependency DAG. Codex maintains both the hierarchy and dependency state.
 
-The Lich drafts complete breadth without predicting private details. Vampires add subsystem depth just before implementation. Skeletons complete cohesive units. Shade evaluates each resolution against direct evidence and binding user outcomes.
+The Lich drafts complete breadth and makes the codebase take strategic shape without predicting private details. Vampires add subsystem depth by writing executable contracts and skeletons just before implementation. Skeletons complete cohesive units. Shade evaluates each resolution against direct evidence and binding user outcomes.
 
 ## Draft governance
 
@@ -53,12 +51,6 @@ Normal draft evolution does not consume a retry. A critical Shade rejection does
 A Vampire becomes inactive after its integrated subsystem passes. Shade may recall it for a verified tactical or integration defect. Lich may require recall after a strategic revision. Codex reestablishes only the necessary context and preserves scope identity, retry history, unaffected siblings, and prior evidence.
 
 Repairs rerun from the lowest responsible level through affected descendants only. Rejection after retry 2 for the same stable finding terminates the project.
-
-## Terminal authority
-
-Codex may propose PASS, BLOCKED, or terminal FAIL, but the plugin's completion validator decides whether the evidence permits the session to stop. PASS requires all acceptance items and gates. BLOCKED requires a genuine external condition that covers every unfinished item and unresolved critical finding. FAIL requires one stable critical finding rejected at attempt 0, retry 1, and retry 2.
-
-Incomplete, corrupt, or stale active ledger state is nonterminal. The Stop hook returns a concrete continuation reason instead of allowing an honest partial implementation to become the terminal result. The user retains authority to abort explicitly or administratively disable hooks.
 
 ## Cost philosophy
 

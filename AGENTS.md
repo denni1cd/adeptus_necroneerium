@@ -19,6 +19,8 @@ Codex is the orchestrator.
 - Each Vampire may define many Skeleton implementation assignments.
 - Shade reviews at Skeleton, Vampire, phase, and project resolution and may route or recall work backward.
 
+Lich and Vampire are code-producing responsibilities. The Lich creates or revises the actual repository structure and strategic code seams. Each Vampire writes executable tactical contracts and skeleton code before Skeleton implementation begins. Prose-only Lich or Vampire output is a process failure.
+
 Roles are responsibility labels, not mandatory separate agents or personalities. Use separate contexts only when they materially help the task.
 
 Responsibility is hierarchical; code dependencies may form a DAG.
@@ -40,7 +42,7 @@ When changing the process, update every affected source of doctrine rather than 
 - `skills/adeptus-necroneerium/SKILL.md`;
 - relevant role guides and templates;
 - `agents/openai.yaml` when invocation metadata changes.
-- `.codex-plugin/plugin.json`, hook behavior, ledger tooling, and policy tests when terminal enforcement changes.
+- `.codex-plugin/plugin.json` and contract tests when packaged behavior changes.
 
 Search for contradictory legacy wording after edits. In particular, the Lich must never be reduced to planning only the next vertical slice, and a local PASS must never imply project completion.
 
@@ -57,5 +59,3 @@ Shade must test claims at the boundary being claimed. Generated tests do not pro
 Run README commands verbatim. Perform cleanup scans after the final artifact-generating command. State unverified requirements honestly.
 
 Critical findings keep stable IDs and isolated counters: attempt 0, retry 1 after first rejection, retry 2 after the second, and terminal project FAIL after rejection of retry 2. Recalls and reroutes never reset counters.
-
-The session completion guard is part of the doctrine, not optional packaging. Keep invocation detection opt-in, state outside the target, writes atomic, non-Adeptus sessions untouched, and terminal PASS/BLOCKED/FAIL mechanically consistent with the installed skill.

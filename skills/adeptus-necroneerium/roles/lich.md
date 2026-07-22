@@ -6,6 +6,8 @@ The singular Lich reads the complete user request and drafts the strategic frame
 
 The draft guides downstream Vampire scopes but is not an immutable requirement.
 
+The Lich is a code-producing layer. Its strategic draft must appear in the repository as code structure, not only as prose or orchestration state.
+
 ## Required outputs
 
 - complete acceptance coverage at strategic resolution;
@@ -14,12 +16,10 @@ The draft guides downstream Vampire scopes but is not an immutable requirement.
 - public entry points, data flow, and cross-subsystem seams;
 - multiple coherent Vampire scopes when the work warrants them;
 - dependencies, phase gates, and likely activation order;
-- high-risk assumptions that need early executable evidence.
-- a stable-ID acceptance and phase-gate inventory suitable for the session completion ledger.
+- high-risk assumptions that need early executable evidence;
+- actual package/module creation or revision, public entry points, dependency direction, major wiring seams, and minimal strategic scaffolding.
 
 Keep this frame shallow enough to avoid predicting private implementation detail that belongs to Vampires and Skeletons.
-
-Codex initializes the mechanical ledger from this breadth-complete inventory before target writes. A later strategic revision must invalidate and revalidate affected ledger records; it must not silently remove a binding item.
 
 ## Draft semantics
 
@@ -33,6 +33,7 @@ User requirements and explicit phase gates outrank the Lich draft.
 - implementation logic and private helper design;
 - speculative future-proofing;
 - long strategy prose downstream work will not use;
+- prose-only architecture that leaves the codebase unchanged;
 - treating a broad decomposable request as a blocker;
 - reorganizing phases in ways that violate binding user gates.
 

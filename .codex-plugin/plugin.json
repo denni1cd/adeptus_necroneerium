@@ -1,7 +1,7 @@
 {
   "name": "adeptus-necroneerium",
-  "version": "0.1.0+codex.20260719235225",
-  "description": "Hierarchical coding orchestration with evidence-gated completion enforcement.",
+  "version": "0.2.0+codex.20260722150000",
+  "description": "Progressive code construction through strategic, tactical, implementation, and review layers.",
   "author": {
     "name": "denni1cd",
     "url": "https://github.com/denni1cd"
@@ -11,8 +11,8 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "Adeptus Necroneerium",
-    "shortDescription": "Evidence-gated hierarchical coding orchestration",
-    "longDescription": "Orchestrates substantial coding work through a layered hierarchy and mechanically prevents unsupported PASS, BLOCKED, or terminal FAIL outcomes.",
+    "shortDescription": "Layered, code-producing development workflow",
+    "longDescription": "Builds substantial software through progressively resolved code: Lich shapes repository structure, Vampire writes executable contracts and skeletons, Skeleton completes behavior, and Shade verifies and routes repairs.",
     "developerName": "denni1cd",
     "category": "Productivity",
     "capabilities": [],

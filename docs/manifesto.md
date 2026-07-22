@@ -25,8 +25,8 @@ The diagram is a tree of responsibility, not a claim that software dependencies 
 ## Doctrine
 
 1. **Codex orchestrates the complete request.** Codex owns progression, dependency scheduling, recalls, phase gates, and terminal status.
-2. **One Lich sees the whole.** The singular Lich reads every requested phase and drafts the entire project in breadth before tactical implementation begins.
-3. **One Lich may establish many Vampires.** Each Vampire owns one coherent tactical subsystem and may command many Skeleton assignments.
+2. **One Lich sees the whole and shapes real code.** The singular Lich reads every requested phase, drafts the entire project in breadth, and creates or revises the repository structure and strategic code seams before tactical implementation begins.
+3. **One Lich may establish many code-producing Vampires.** Each Vampire owns one coherent tactical subsystem, writes its executable contracts and skeletons, and may command many Skeleton assignments.
 4. **Higher-level work is a draft, not a decree.** Lich and Vampire outputs guide downstream work but remain open to evidence-driven revision.
 5. **Freedom to revise carries an obligation to propagate.** Lower responsibilities need no routine permission to improve a draft, but must update affected contracts, tests, dependencies, and validation state.
 6. **User outcomes outrank internal drafts.** Explicit requirements, acceptance criteria, safety constraints, and phase gates are binding unless the user changes them.
@@ -36,13 +36,11 @@ The diagram is a tree of responsibility, not a claim that software dependencies 
 10. **Retired Vampires can be recalled.** Shade may recall a tactical scope for a verified critical or integration defect; Lich may require recall after strategic revision. Recall preserves scope and retry identity.
 11. **Shade reviews every resolution.** Skeleton behavior, Vampire subsystem integration, phase gates, and the final product each receive evidence-based judgment.
 12. **A local PASS is not project PASS.** Codex continues until every requested acceptance item and gate passes, a genuine external blocker prevents progress, or one finding fails after retry 2.
-13. **Terminal conditions are mechanically guarded.** Explicit invocation creates a session ledger. Codex cannot voluntarily emit a final response until the ledger certifies complete PASS, a genuine external BLOCKED state, or one stable critical finding rejected through retry 2.
-14. **The guard fails closed without contaminating the target.** Missing, incomplete, or corrupt active state causes continuation; ledger data belongs to plugin session storage rather than the delivered repository.
-15. **Working code outranks agent artifacts.** Plans and handoffs exist only when downstream implementation or review uses them.
-16. **Spend tokens to prevent rework, not to describe work.** Structure is justified when it reduces drift, missed requirements, false claims, reimplementation, or user reprompting.
-17. **Quality and total token efficiency outrank speed.** Maximum parallelism and fastest completion are not goals; neither is arbitrary frugality that omits necessary code or verification.
-18. **Claims require direct evidence.** Tests, UI, CLI, API, process handling, persistence, documentation commands, and cleanup must be checked at the boundary being claimed.
-19. **Adeptus must prove its value.** Compare it against plain Codex. If it cannot improve quality, evolvability, review honesty, or total interaction cost on practical tasks, simplify or abandon it.
+13. **Working code outranks agent artifacts.** Plans and handoffs exist only when downstream implementation or review uses them.
+14. **Spend tokens to prevent rework, not to describe work.** Structure is justified when it reduces drift, missed requirements, false claims, reimplementation, or user reprompting.
+15. **Quality and total token efficiency outrank speed.** Maximum parallelism and fastest completion are not goals; neither is arbitrary frugality that omits necessary code or verification.
+16. **Claims require direct evidence.** Tests, UI, CLI, API, process handling, persistence, documentation commands, and cleanup must be checked at the boundary being claimed.
+17. **Adeptus must prove its value.** Compare it against plain Codex. If it cannot improve quality, evolvability, review honesty, or total interaction cost on practical tasks, simplify or abandon it.
 
 ## Draft discipline
 
@@ -55,14 +53,6 @@ A lower responsibility may change a draft without waiting for its parent when ev
 Codex normally activates one dependency-ready Vampire at a time. The Vampire drafts its subsystem, its Skeleton army implements it, and Shade reviews both the individual items and their integration. On PASS, Codex retires that Vampire and activates the next ready scope.
 
 Retirement means inactive, not sealed. A recalled Vampire receives a compact updated context containing its stable scope, current strategic draft, prior tactical draft, direct finding evidence, retry state, affected descendants, and revalidation conditions. Unrelated project history and passed sibling work remain outside the recall.
-
-## Completion enforcement
-
-Prose is not sufficient protection against voluntary early stopping. The installed plugin therefore activates a per-session completion ledger on explicit invocation and evaluates it at every Stop event.
-
-The ledger is deliberately compact: binding acceptance and gates, current phase, stable findings and attempts, external blockers, and the proposed terminal outcome. Direct or Tactical work pays only for a small inventory; Adeptus work links the same terminal ledger to its richer hierarchy state. State mutations invalidate any earlier terminal proposal.
-
-The hook permits PASS only after all required records carry direct evidence. It permits BLOCKED only when one evidenced external blocker covers all unfinished requirements and unresolved critical findings. It permits FAIL only for one stable critical finding with evidenced attempt 0, retry 1, and retry 2. Otherwise Codex receives a continuation reason and resumes the next feasible item. An explicit user abort remains authoritative.
 
 ## Cost discipline
 

@@ -1,6 +1,6 @@
 ---
 name: adeptus-necroneerium
-description: Strictly on-demand coding workflow for large or structurally complex implementation tasks. Use only when the user explicitly requests Adeptus Necroneerium, writes adeptus_necroneerium, or invokes @adeptus-necroneerium. Codex orchestrates one whole-project Lich draft, multiple Vampire tactical scopes, bounded Skeleton implementation assignments, evidence-based Shade review, and mechanically guarded terminal conditions.
+description: Strictly on-demand coding workflow for large or structurally complex implementation tasks. Use only when the user explicitly requests Adeptus Necroneerium, writes adeptus_necroneerium, or invokes @adeptus-necroneerium. Codex orchestrates a code-producing Lich strategic draft, code-producing Vampire tactical scopes, bounded Skeleton implementation assignments, and evidence-based Shade review with backward routing and isolated retries.
 ---
 
 # Adeptus Necroneerium
@@ -16,43 +16,6 @@ The goal is fewer user reprompts, less architectural drift, less rework, and mor
 This skill is strictly opt-in. Run it only when the user explicitly requests Adeptus Necroneerium by name, writes `adeptus_necroneerium`, or invokes `@adeptus-necroneerium`. The native `$adeptus-necroneerium` form is equivalent.
 
 Never self-invoke based on complexity, file count, ambiguity, prior drift, or a failed direct attempt. Those traits affect mode selection only after explicit invocation.
-
-## Mechanical completion guard
-
-The installed plugin activates a session-scoped ledger on explicit invocation. Hook context supplies absolute paths for the ledger and `adeptus_state.py`. This state belongs to plugin data, not the target repository.
-
-After read-only preflight and whole-request inspection, but before target writes:
-
-1. Build the complete binding acceptance inventory, including every requested phase and gate.
-2. Write a temporary inventory JSON object with `request_title`, `current_phase`, `acceptance`, `phase_gates`, and optional `lich_revision` and `vampire_scopes`.
-3. Give every acceptance and gate record a unique stable `id`, observable `description`, optional `phase`, `state` (initially `pending`), and `evidence` list.
-4. Initialize the injected ledger:
-
-```text
-python <adeptus-state-script> init --state <session-ledger> --inventory <inventory-json>
-```
-
-Keep it current with the tool rather than editing it by hand:
-
-```text
-python <adeptus-state-script> set-item --state <session-ledger> --id <id> --status passed --evidence <direct-result>
-python <adeptus-state-script> set-gate --state <session-ledger> --id <id> --status passed --evidence <direct-result>
-python <adeptus-state-script> advance-phase --state <session-ledger> --gate <gate-id> --to <next-phase>
-```
-
-Use `record-finding --help` and `record-blocker --help` for routed failures and genuine external blockers. Finding IDs and attempt evidence are immutable across retries. A blocker must be external, directly evidenced, name an unblock action, and cover every unfinished acceptance or gate ID plus every unresolved critical finding ID.
-
-Immediately before final output, propose exactly one terminal outcome:
-
-```text
-python <adeptus-state-script> propose --state <session-ledger> --outcome PASS
-python <adeptus-state-script> propose --state <session-ledger> --outcome BLOCKED --blocker-id <id>
-python <adeptus-state-script> propose --state <session-ledger> --outcome FAIL --finding-id <id>
-```
-
-An invalid proposal exits nonzero and is nonterminal. Any later ledger mutation invalidates a prior proposal. The Stop hook also rechecks the state: it permits final output only for a certified outcome and otherwise supplies a continuation reason for the next turn.
-
-The user may explicitly end an active run with `@adeptus-necroneerium abort`. Hook unavailability or corruption is not permission to improvise a terminal claim; either repair it before target work or report the genuine external limitation without writing the target.
 
 ## Prime directive
 
@@ -74,8 +37,8 @@ Codex is the orchestrator and retains responsibility for the complete user reque
 
 The named roles are execution responsibilities, not personalities or mandatory separate agent calls:
 
-- **Lich**: one strategic responsibility over the complete requested outcome.
-- **Vampire**: one tactical responsibility per coherent subsystem; a Lich may define many Vampire scopes.
+- **Lich**: one strategic responsibility that reads the complete outcome and creates or revises strategic-resolution code in the repository.
+- **Vampire**: one tactical responsibility per coherent subsystem that writes executable contracts and skeleton code; a Lich may define many Vampire scopes.
 - **Skeleton**: one bounded implementation responsibility; each Vampire may define many Skeleton assignments.
 - **Shade**: review, integration judgment, backward routing, and recall authority at Skeleton, Vampire, phase, and project gates.
 
@@ -149,6 +112,8 @@ It drafts the entire requested outcome in breadth, including later phases, while
 - phase and compatibility gates that must remain binding;
 - high-risk seams that need early executable evidence.
 
+The Lich must materialize this draft in the actual codebase. Create or revise package and module structure, public entry points, dependency direction, major wiring seams, and minimal strategic scaffolding. Do not substitute a prose architecture document for these code edits, and do not fill detailed behavior that belongs to Vampires and Skeletons.
+
 The Lich may reorganize implementation order when that improves development, but it may not violate explicit user gates. Awareness of future phases should prevent dead-end architecture, not justify speculative implementation.
 
 A broad request is not by itself a blocker. Decomposing broad work is the Lich's responsibility. Block only for irreducible ambiguity, conflicting binding requirements, missing authority, or unavailable external dependencies.
@@ -169,6 +134,8 @@ The active Vampire reads its relevant Lich context and drafts the complete tacti
 - cross-scope interfaces inherited from or proposed back to the Lich draft;
 - bounded Skeleton assignments and their dependency order;
 - subsystem acceptance conditions and integration checks.
+
+The Vampire must write this frame into the actual codebase as executable skeletons: function and method signatures, classes, dataclasses, enums, schemas, exceptions, docstrings, explicit placeholders where appropriate, and test names or test skeletons. Its work must make the next Skeleton implementation safer and more direct. A prose-only tactical plan does not satisfy the Vampire responsibility.
 
 The Vampire should remove ambiguity for Skeleton work without implementing the whole subsystem or inventing speculative abstractions.
 
@@ -201,6 +168,8 @@ On PASS, Codex retires the Vampire context, preserves its current draft and evid
 ### 7. Continue until the full request is covered
 
 Codex continues through every required Vampire scope. A working subsystem, vertical slice, milestone, or phase checkpoint is never project PASS when requested work remains.
+
+A local PASS is not project PASS. It is evidence for the next dependency-ready step.
 
 If a phase gate is binding, record its direct evidence and proceed automatically to the next requested phase unless user input is genuinely required.
 
@@ -269,7 +238,7 @@ Upstream repair is intentionally more expensive because it invalidates more down
 
 ## Orchestration state and completion accounting
 
-For Adeptus mode, Codex maintains compact hierarchical work state linked to the mandatory session completion ledger. Together they contain:
+For Adeptus mode, Codex maintains compact hierarchical work state containing:
 
 - the complete requested outcomes and binding gates;
 - the current Lich draft revision;
@@ -278,13 +247,13 @@ For Adeptus mode, Codex maintains compact hierarchical work state linked to the 
 - invalidated work requiring revalidation;
 - Shade findings and isolated retry histories.
 
-The plugin ledger is mandatory and remains outside the target. Use existing planning state for richer Lich, Vampire, and Skeleton detail when sufficient. Create another temporary or repository artifact only when it materially prevents state loss, and do not ship ceremonial process debris with the product.
+Use existing planning state when sufficient. Create a temporary or repository artifact only when it materially prevents state loss on a long task, and do not ship ceremonial process debris with the product.
 
 When one item passes, schedule the next known ready item. Do not ask a parent responsibility a question whose answer is already in the current work state.
 
 If requested work remains but no scope is ready, diagnose a dependency deadlock, missing decomposition, or external blocker. Do not silently stop.
 
-Project PASS is allowed only when every binding acceptance item and required phase/project gate has passed with evidence and the ledger certifies PASS. Otherwise continue, certify a genuine BLOCKED state, or certify terminal retry failure; never present an honest partial foundation as completion.
+Project PASS is allowed only when every binding acceptance item and required phase/project gate has passed with direct evidence. Otherwise continue, report a genuine BLOCKED state, or report terminal retry failure; never present an honest partial foundation as completion.
 
 ## Token discipline
 
@@ -316,11 +285,11 @@ Include stable finding ID, scope path, judged item, root defect, responsible lev
 
 ### Terminal FAIL
 
-Use only when the same finding remains rejected after retry 2 and the ledger certifies FAIL. Include its complete attempt history and stop the project.
+Use only when the same finding remains rejected after retry 2. Include its complete attempt history and stop the project.
 
 ### BLOCKED
 
-Use only when progress requires unavailable user input, authority, or an external dependency and the ledger certifies that it covers all unfinished work. Include what is missing, direct evidence, why safe progress cannot continue, and the narrowest action that would unblock it.
+Use only when progress requires unavailable user input, authority, or an external dependency. Include what is missing, direct evidence, why safe progress cannot continue, and the narrowest action that would unblock it. Missing plugin, hook, or bookkeeping context is never by itself a reason to block implementation.
 
 ## Anti-patterns
 
@@ -338,4 +307,5 @@ Do not:
 - restart unaffected sibling scopes after a local repair;
 - pool or reset retry counters;
 - accept tests, documentation, cleanup, UI, CLI, or process claims without checking the claimed boundary;
-- spend more effort narrating the hierarchy than implementing and verifying the product.
+- spend more effort narrating the hierarchy than implementing and verifying the product;
+- require hook output, an injected path, a version check, or installation forensics before beginning ordinary target work.
