@@ -26,7 +26,7 @@ The diagram is a tree of responsibility, not a claim that software dependencies 
 
 1. **Codex orchestrates the complete request.** Codex owns progression, dependency scheduling, recalls, phase gates, and terminal status.
 2. **One Lich sees the whole and shapes real code.** The singular Lich reads every requested phase, drafts the entire project in breadth, and creates or revises the repository structure and strategic code seams before tactical implementation begins.
-3. **One Lich may establish many code-producing Vampires.** Each Vampire owns one coherent tactical subsystem, writes its executable contracts and skeletons, and may command many Skeleton assignments.
+3. **One Lich may establish many code-producing Vampires.** Each Vampire owns one coherent tactical subsystem, writes its executable contracts and skeletons, maps binding criteria to executable proof targets, and may command many Skeleton assignments.
 4. **Higher-level work is a draft, not a decree.** Lich and Vampire outputs guide downstream work but remain open to evidence-driven revision.
 5. **Freedom to revise carries an obligation to propagate.** Lower responsibilities need no routine permission to improve a draft, but must update affected contracts, tests, dependencies, and validation state.
 6. **User outcomes outrank internal drafts.** Explicit requirements, acceptance criteria, safety constraints, and phase gates are binding unless the user changes them.
@@ -40,7 +40,9 @@ The diagram is a tree of responsibility, not a claim that software dependencies 
 14. **Spend tokens to prevent rework, not to describe work.** Structure is justified when it reduces drift, missed requirements, false claims, reimplementation, or user reprompting.
 15. **Quality and total token efficiency outrank speed.** Maximum parallelism and fastest completion are not goals; neither is arbitrary frugality that omits necessary code or verification.
 16. **Claims require direct evidence.** Tests, UI, CLI, API, process handling, persistence, documentation commands, and cleanup must be checked at the boundary being claimed.
-17. **Adeptus must prove its value.** Compare it against plain Codex. If it cannot improve quality, evolvability, review honesty, or total interaction cost on practical tasks, simplify or abandon it.
+17. **Interaction and lifetime contracts are first-class.** Test shared state across interfaces, read-only operations for unintended mutation, and background work beyond the lifetime of its initiating command or request.
+18. **Unverified is not PASS.** Shade independently classifies each binding item as verified, failed, or unverified. Failed or unverified binding items prohibit PASS.
+19. **Adeptus must prove its value.** Compare it against plain Codex. If it cannot improve quality, evolvability, review honesty, or total interaction cost on practical tasks, simplify or abandon it.
 
 ## Draft discipline
 

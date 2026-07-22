@@ -21,6 +21,7 @@ class SkillContractTests(unittest.TestCase):
         cls.lich = read("skills/adeptus-necroneerium/roles/lich.md")
         cls.vampire = read("skills/adeptus-necroneerium/roles/vampire.md")
         cls.shade = read("skills/adeptus-necroneerium/roles/shade.md")
+        cls.template = read("skills/adeptus-necroneerium/templates/spec.md")
 
     def test_skill_remains_explicitly_opt_in(self) -> None:
         frontmatter = self.skill.split("---", 2)[1]
@@ -88,11 +89,36 @@ class SkillContractTests(unittest.TestCase):
 
     def test_pass_still_requires_complete_acceptance_evidence(self) -> None:
         self.assertIn(
-            "Project PASS is allowed only when every binding acceptance item and required "
-            "phase/project gate has passed with direct evidence.",
+            "Project PASS is allowed only when every binding acceptance item is `verified` "
+            "and every required phase/project gate has passed with direct evidence.",
             self.skill,
         )
         self.assertIn("A local PASS is not project PASS", self.skill)
+
+    def test_vampire_maps_binding_acceptance_to_executable_checks(self) -> None:
+        combined = f"{self.skill}\n{self.vampire}".lower()
+        self.assertIn(
+            "every binding acceptance criterion in scope to an executable test or explicit "
+            "executable verification target",
+            combined,
+        )
+        self.assertIn("exact command, observation, and expected result", combined)
+        self.assertIn("claimed public boundaries", combined)
+
+    def test_shade_cannot_pass_failed_or_unverified_binding_items(self) -> None:
+        combined = f"{self.skill}\n{self.shade}\n{self.template}".lower()
+        self.assertIn("classify every binding acceptance item", combined)
+        self.assertIn("`verified`, `failed`, or `unverified`", combined)
+        self.assertIn("any `failed` or `unverified` binding item prohibits pass", combined)
+        self.assertIn("independently exercise important public boundaries", combined)
+
+    def test_interaction_and_lifecycle_regressions_are_required(self) -> None:
+        combined = f"{self.skill}\n{self.vampire}\n{self.shade}".lower()
+        self.assertIn("read-only operations", combined)
+        self.assertIn("do not mutate durable or process state", combined)
+        self.assertIn("background work beyond the lifetime", combined)
+        self.assertIn("cross-interface interactions", combined)
+        self.assertIn("lifecycle ownership", combined)
 
     def test_manifest_describes_progressive_code_construction(self) -> None:
         manifest = json.loads(read(".codex-plugin/plugin.json"))

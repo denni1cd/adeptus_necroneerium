@@ -21,6 +21,8 @@ Codex is the orchestrator.
 
 Lich and Vampire are code-producing responsibilities. The Lich creates or revises the actual repository structure and strategic code seams. Each Vampire writes executable tactical contracts and skeleton code before Skeleton implementation begins. Prose-only Lich or Vampire output is a process failure.
 
+Each Vampire maps every binding acceptance criterion in scope to an executable test or exact executable verification target. Cross-interface behavior, read-only state safety, and work that outlives its initiating command or request require interaction-level checks rather than isolated component tests.
+
 Roles are responsibility labels, not mandatory separate agents or personalities. Use separate contexts only when they materially help the task.
 
 Responsibility is hierarchical; code dependencies may form a DAG.
@@ -55,6 +57,8 @@ Quality and total token efficiency outrank speed. Use the lightest mode appropri
 ## Review discipline
 
 Shade must test claims at the boundary being claimed. Generated tests do not prove UI, CLI, API, subprocess, persistence, restart, concurrency, documentation, or cleanup behavior when they bypass that boundary.
+
+Shade independently exercises important public boundaries and classifies every binding acceptance item as `verified`, `failed`, or `unverified`. Any `failed` or `unverified` binding item prohibits PASS. Tactical omissions in acceptance coverage, cross-interface contracts, or lifecycle ownership route to Vampire; localized implementation defects route to Skeleton.
 
 Run README commands verbatim. Perform cleanup scans after the final artifact-generating command. State unverified requirements honestly.
 

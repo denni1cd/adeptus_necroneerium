@@ -37,7 +37,9 @@ The Lich must not stop at the next vertical slice. It anticipates future phases 
 
 ### Vampire activation
 
-Codex selects a dependency-ready Vampire scope, normally one at a time. The Vampire creates the complete tactical draft for that subsystem as executable skeleton code: files, contracts, tests, edge cases, cross-scope interfaces, Skeleton assignments, and retirement conditions.
+Codex selects a dependency-ready Vampire scope, normally one at a time. The Vampire creates the complete tactical draft for that subsystem as executable skeleton code: files, contracts, tests, edge cases, cross-scope interfaces, Skeleton assignments, and retirement conditions. It maps every binding criterion in scope to an executable test or an exact executable verification target before implementation.
+
+When interfaces share state or process ownership, test their interaction rather than only each component. Verify read-only operations do not mutate durable or process state, and verify background work beyond the lifetime of the command, request, or context that started it.
 
 ### Skeleton execution
 
@@ -91,7 +93,7 @@ Shade routes a critical finding to the lowest responsible level:
 - Lich topology or whole-request decomposition;
 - user requirement or external dependency.
 
-Shade judges observed acceptance, not conformance to an internal draft alone.
+Shade judges observed acceptance, not conformance to an internal draft alone. It independently exercises important public boundaries and classifies every binding item as `verified`, `failed`, or `unverified`; any failed or unverified binding item prohibits PASS.
 
 ## Vampire recall
 
@@ -132,7 +134,7 @@ Project terminal outcomes are:
 
 ## Evidence standards
 
-Shade verifies claims at the boundary claimed. Run README commands verbatim. Exercise real UI, CLI, API, storage, process, restart, scheduling, and concurrency behavior when claimed. Scan cleanup only after the last command capable of regenerating debris. State unverified requirements explicitly.
+Shade verifies claims at the boundary claimed. Run README commands verbatim. Exercise real UI, CLI, API, storage, process, restart, scheduling, and concurrency behavior when claimed, including cross-interface state and work that outlives its initiator. Scan cleanup only after the last command capable of regenerating debris. State unverified requirements explicitly and never convert them into PASS.
 
 ## Token discipline
 
