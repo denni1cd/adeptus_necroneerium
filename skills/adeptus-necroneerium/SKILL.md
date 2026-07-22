@@ -130,7 +130,8 @@ The active Vampire reads its relevant Lich context and drafts the complete tacti
 
 - files or tightly related code areas;
 - types, signatures, schemas, exceptions, and behavioral contracts;
-- relevant test intent and falsification cases;
+- a mapping from every binding acceptance criterion in scope to an executable test or explicit executable verification target;
+- relevant test intent and falsification cases at the actual claimed boundary;
 - cross-scope interfaces inherited from or proposed back to the Lich draft;
 - bounded Skeleton assignments and their dependency order;
 - subsystem acceptance conditions and integration checks.
@@ -138,6 +139,8 @@ The active Vampire reads its relevant Lich context and drafts the complete tacti
 The Vampire must write this frame into the actual codebase as executable skeletons: function and method signatures, classes, dataclasses, enums, schemas, exceptions, docstrings, explicit placeholders where appropriate, and test names or test skeletons. Its work must make the next Skeleton implementation safer and more direct. A prose-only tactical plan does not satisfy the Vampire responsibility.
 
 The Vampire should remove ambiguity for Skeleton work without implementing the whole subsystem or inventing speculative abstractions.
+
+When a requirement spans public interfaces or lifecycle boundaries, the tactical frame must include the interaction, not isolated component checks alone. Test read-only operations for unintended durable or process-state mutation. Test background work beyond the lifetime of the command, request, or context that started it. If automation is impractical, define the exact command, observation, and expected result that Shade must execute.
 
 ### 4. Skeleton army: bounded implementation
 
@@ -177,11 +180,16 @@ If a phase gate is binding, record its direct evidence and proceed automatically
 
 At each required phase gate and at final completion, Shade independently checks the integrated product against the complete acceptance inventory.
 
+Shade classifies every binding acceptance item as `verified`, `failed`, or `unverified` from direct evidence. Any `failed` or `unverified` binding item prohibits PASS. Missing evidence is not success and must trigger continued verification or a routed finding.
+
 Required review includes, where relevant:
 
 - executable behavior at real claimed boundaries;
+- independent exercise of important public boundaries rather than reliance only on implementation-authored tests;
 - full and focused tests with exact results;
 - public API, CLI, UI, persistence, concurrency, restart, and process behavior;
+- cross-interface interactions, including whether read-only operations mutate durable or process state;
+- background work surviving or completing safely beyond the initiating command or request lifetime;
 - backward compatibility and retained fixtures;
 - README commands run verbatim from documented working directories;
 - documentation claims compared with actual behavior;
@@ -195,7 +203,7 @@ Passing generated unit tests is not sufficient evidence for a boundary those tes
 Shade assigns each critical finding to the lowest responsible scope:
 
 - **Skeleton**: implementation defect, failed test, placeholder, missing edge case, or behavior contradicting the current contract.
-- **Vampire**: incorrect or incomplete tactical contract, test intent, subsystem decomposition, or cross-scope interface.
+- **Vampire**: incorrect or incomplete tactical contract, acceptance-to-evidence mapping, lifecycle ownership, test intent, subsystem decomposition, or cross-scope interface.
 - **Lich**: incorrect project topology, dependency direction, subsystem boundary, public seam, or whole-request decomposition.
 - **Requirement/User**: conflicting binding requirements, missing decision or authority, or unavailable dependency.
 
@@ -241,6 +249,7 @@ Upstream repair is intentionally more expensive because it invalidates more down
 For Adeptus mode, Codex maintains compact hierarchical work state containing:
 
 - the complete requested outcomes and binding gates;
+- each binding acceptance item's `verified`, `failed`, or `unverified` state and supporting evidence;
 - the current Lich draft revision;
 - all Vampire scopes, dependencies, and states;
 - Skeleton assignments and states for active or recalled scopes;
@@ -253,7 +262,7 @@ When one item passes, schedule the next known ready item. Do not ask a parent re
 
 If requested work remains but no scope is ready, diagnose a dependency deadlock, missing decomposition, or external blocker. Do not silently stop.
 
-Project PASS is allowed only when every binding acceptance item and required phase/project gate has passed with direct evidence. Otherwise continue, report a genuine BLOCKED state, or report terminal retry failure; never present an honest partial foundation as completion.
+Project PASS is allowed only when every binding acceptance item is `verified` and every required phase/project gate has passed with direct evidence. Any `failed` or `unverified` binding item prohibits PASS. Otherwise continue verification or repair, report a genuine BLOCKED state, or report terminal retry failure; never present an honest partial foundation as completion.
 
 ## Token discipline
 

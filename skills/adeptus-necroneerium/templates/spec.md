@@ -12,9 +12,11 @@ This is compact orchestration state, not a ceremonial design document. Lich and 
 
 <!-- Record observable user requirements, compatibility constraints, and phase gates. -->
 
-| ID | Required outcome | Direct evidence required | State |
+| ID | Required outcome | Executable test or exact verification target | State |
 | --- | --- | --- | --- |
-|  |  |  | Pending |
+|  |  |  | Unverified |
+
+Binding item states are `verified`, `failed`, or `unverified`. Pending implementation remains `unverified`; any `failed` or `unverified` binding item prohibits PASS.
 
 ## Selected mode
 
@@ -48,7 +50,7 @@ Relevant Lich draft revision:
 
 ### Files, contracts, and tests
 
-<!-- Define the subsystem's files or code areas, signatures, schemas, exceptions, behaviors, edge cases, and integration checks. This is guidance and may be revised from implementation evidence. -->
+<!-- Define the subsystem's files or code areas, signatures, schemas, exceptions, behaviors, edge cases, and integration checks. Map every binding criterion in scope to an executable test or an exact command, observation, and expected result. Include cross-interface, read-only mutation, and background-lifetime checks when relevant. This is guidance and may be revised from implementation evidence. -->
 
 ### Skeleton assignments
 
@@ -82,6 +84,10 @@ Relevant Lich draft revision:
 
 <!-- Full acceptance coverage, real boundary checks, exact test totals, README commands, documentation audit, and final cleanup. -->
 
+| Acceptance ID | State | Direct evidence | Independent boundary check |
+| --- | --- | --- | --- |
+|  | Unverified |  |  |
+
 ## Finding and recall state
 
 Initial judged work is attempt 0. First rejection triggers retry 1; rejection of retry 1 triggers retry 2; rejection after retry 2 terminates the project. Never pool or reset counters.
@@ -94,9 +100,11 @@ For a Vampire recall, preserve the scope ID, relevant drafts, finding identity, 
 
 ## Completion state
 
-Completed acceptance IDs:
+Verified acceptance IDs:
 
-Remaining acceptance IDs:
+Failed acceptance IDs:
+
+Unverified acceptance IDs:
 
 Next dependency-ready scope/item:
 
@@ -104,6 +112,6 @@ Invalidated work awaiting revalidation:
 
 Current outcome: <!-- IN PROGRESS, PASS, BLOCKED, or TERMINAL FAIL -->
 
-Project PASS is forbidden while a binding acceptance item, required Vampire scope, phase gate, or project gate remains incomplete.
+Project PASS is forbidden while a binding acceptance item is `failed` or `unverified`, or a required Vampire scope, phase gate, or project gate remains incomplete.
 
 Before final output, confirm every binding requirement and gate has direct evidence. BLOCKED requires a genuine external blocker that prevents all remaining feasible progress. Terminal FAIL requires one stable finding rejected with evidence at attempt 0, retry 1, and retry 2.

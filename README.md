@@ -17,7 +17,7 @@ The registered skill name is `adeptus-necroneerium`; the repository and prompt a
 Codex is the orchestrator. Role names identify responsibilities and do not require separate personalities, roleplay, or agent contexts.
 
 - **One Lich** reads the complete request, drafts the whole-project strategic topology, and creates or revises the actual package/module structure, public entry points, and major integration seams.
-- **Many Vampires** may each own one coherent tactical subsystem and write its actual signatures, types, schemas, exceptions, docstrings, and test skeletons.
+- **Many Vampires** may each own one coherent tactical subsystem, write its actual signatures, types, schemas, exceptions, docstrings, and test skeletons, and map binding criteria to executable boundary checks.
 - **Many Skeletons** may each implement one bounded unit, usually a file and all relevant stubs or a tightly coupled implementation-and-test unit.
 - **Shade** reviews Skeleton items, integrated Vampire scopes, phase gates, and the final project; routes failures backward; and may recall retired Vampires when direct evidence requires it.
 
@@ -45,6 +45,8 @@ Shade routes critical findings to the lowest responsible level:
 - user requirement or external dependency.
 
 Retired Vampires are inactive, not sealed. Shade may recall one for a verified tactical or integration defect; Lich may require recall after a strategic revision. Recalls preserve scope identity, finding identity, retry state, and unaffected sibling work.
+
+Vampire acceptance design must cover interactions when public interfaces share state or process ownership, confirm read-only operations do not mutate state, and verify background work beyond the lifetime of the initiating command or request. At phase and project gates, Shade independently classifies each binding item as `verified`, `failed`, or `unverified`; any failed or unverified binding item prohibits PASS.
 
 ## Retry rule
 

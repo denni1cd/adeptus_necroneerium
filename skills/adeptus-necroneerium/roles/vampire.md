@@ -13,10 +13,24 @@ The Vampire is a code-producing layer. It writes executable contracts and skelet
 - stable subsystem scope and acceptance conditions;
 - files or tightly related code areas;
 - actual function and method signatures, classes, dataclasses, enums, schemas, exceptions, docstrings, and behavioral contracts;
-- actual test names or test skeletons covering relevant edge cases and falsification cases;
+- a mapping from every binding acceptance criterion in scope to an executable test or explicit executable verification target;
+- actual test names or test skeletons covering relevant edge cases, falsification cases, and claimed public boundaries;
 - cross-Vampire integration contracts;
 - bounded Skeleton assignments and their dependencies;
 - subsystem integration and retirement checks.
+
+## Acceptance design
+
+Turn binding criteria into proof obligations before Skeleton implementation. Prefer automated boundary tests. When automation is impractical, record the exact command, observation, and expected result that Shade must execute; a vague note to "verify manually" is insufficient.
+
+For behavior spanning interfaces or lifetimes, test the interaction itself:
+
+- exercise CLI, API, UI, persistence, subprocess, or other public boundaries together when state or ownership is shared;
+- verify read-only operations do not mutate durable state, reconcile active work, or terminate processes;
+- verify background work beyond the lifetime of the command, request, or context that started it;
+- test failure, restart, cancellation, timeout, and migration ownership at the boundary where the user experiences them.
+
+Component tests remain useful, but they cannot replace a binding cross-interface or lifecycle check.
 
 ## Draft semantics
 
@@ -30,6 +44,7 @@ When tactical evidence changes acceptance coverage, gates, or previously passed 
 
 - implementing the whole subsystem instead of shaping it;
 - replacing executable skeletons with a prose plan;
+- leaving a binding acceptance criterion without an executable test or explicit executable verification target;
 - speculative APIs or abstractions;
 - restating the complete project specification;
 - splitting work into agent calls per function;

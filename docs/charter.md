@@ -28,6 +28,9 @@ Codex is always the orchestrator. Named roles describe responsibility:
 - Codex advances known ready work without unnecessary parent callbacks.
 - A local or phase PASS is not project PASS while requested work remains.
 - Shade verifies real boundaries, routes failures backward, and may recall retired Vampires.
+- Vampires map binding criteria to executable tests or exact verification targets before implementation.
+- Cross-interface state, read-only behavior, and background-work lifetime receive interaction-level checks.
+- Shade independently marks binding items verified, failed, or unverified; failed or unverified items prohibit PASS.
 - Critical findings have stable identities and isolated two-retry budgets.
 - Quality and total token efficiency outrank speed and maximum concurrency.
 - The skill remains strictly opt-in.
