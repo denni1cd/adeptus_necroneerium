@@ -129,7 +129,7 @@ class SkillContractTests(unittest.TestCase):
 
     def test_verifier_derives_expectations_from_the_repository(self) -> None:
         verifier = read("verify-adeptus-update.ps1")
-        self.assertIn("repository-synchronized-v4", verifier)
+        self.assertIn("repository-synchronized-v5", verifier)
         self.assertIn("HEAD matches origin/main", verifier)
         self.assertIn("Get-RelativeFiles", verifier)
         self.assertIn("Invoke-NativeCaptured", verifier)
@@ -138,6 +138,19 @@ class SkillContractTests(unittest.TestCase):
         self.assertNotRegex(verifier, re.compile(r"\b[0-9a-f]{64}\b"))
         self.assertNotIn("[string]::Join", verifier)
         self.assertNotIn("C:\\Users\\Zero", verifier)
+
+    def test_verifier_runs_tests_from_repository_root(self) -> None:
+        verifier = read("verify-adeptus-update.ps1")
+        self.assertIn("$startInfo.WorkingDirectory", verifier)
+        self.assertIn("-WorkingDirectory $repositoryRoot", verifier)
+
+    def test_verifier_has_explicit_bounded_repair_mode(self) -> None:
+        verifier = read("verify-adeptus-update.ps1")
+        self.assertIn("[switch]$Repair", verifier)
+        self.assertIn("function Sync-InstallablePackage", verifier)
+        self.assertIn("foreach ($relativeDirectory in @('.codex-plugin', 'skills'))", verifier)
+        self.assertIn("Refusing repair because", verifier)
+        self.assertIn("codex plugin add $PluginId --json", verifier)
 
 
 if __name__ == "__main__":
