@@ -85,6 +85,14 @@ python3 -m compileall -q tests
 
 On Windows, `py -3` may replace `python3`. Plugin maintainers should also run the current plugin and skill validators supplied with their Codex development environment.
 
+To synchronize the checked-out package into the registered personal plugin and verify the result in one pass:
+
+```powershell
+.\verify-adeptus-update.ps1 -Repair
+```
+
+Without `-Repair`, the verifier is read-only and reports any repository or installation drift.
+
 ## Success criterion
 
 Adeptus Necroneerium matters only if controlled practical tests show a meaningful advantage over plain Codex. If it cannot improve delivered quality, evolvability, review accuracy, or total interaction cost, simplify or abandon it.
