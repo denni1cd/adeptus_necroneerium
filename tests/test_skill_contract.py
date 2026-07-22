@@ -129,9 +129,11 @@ class SkillContractTests(unittest.TestCase):
 
     def test_verifier_derives_expectations_from_the_repository(self) -> None:
         verifier = read("verify-adeptus-update.ps1")
-        self.assertIn("repository-synchronized-v3", verifier)
+        self.assertIn("repository-synchronized-v4", verifier)
         self.assertIn("HEAD matches origin/main", verifier)
         self.assertIn("Get-RelativeFiles", verifier)
+        self.assertIn("Invoke-NativeCaptured", verifier)
+        self.assertNotIn("& py -3 -m unittest", verifier)
         self.assertNotRegex(verifier, re.compile(r"\b[0-9a-f]{40}\b"))
         self.assertNotRegex(verifier, re.compile(r"\b[0-9a-f]{64}\b"))
         self.assertNotIn("[string]::Join", verifier)
