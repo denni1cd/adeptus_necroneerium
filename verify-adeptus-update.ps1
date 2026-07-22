@@ -1,10 +1,13 @@
 [CmdletBinding()]
-param()
+param(
+    [switch]$Repair
+)
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
-$VerifierBuild = 'repository-synchronized-v4'
+$VerifierBuild = 'repository-synchronized-v5'
 $PluginName = 'adeptus-necroneerium'
+$PluginId = "$PluginName@personal"
 $Problems = [System.Collections.Generic.List[string]]::new()
 
 function Write-Pass {
@@ -31,7 +34,8 @@ function Assert-NativeSuccess {
 function Invoke-NativeCaptured {
     param(
         [Parameter(Mandatory)][string]$FilePath,
-        [Parameter(Mandatory)][string]$Arguments
+        [Parameter(Mandatory)][string]$Arguments,
+        [Parameter(Mandatory)][string]$WorkingDirectory
     )
 
     $startInfo = [System.Diagnostics.ProcessStartInfo]::new()
@@ -41,6 +45,7 @@ function Invoke-NativeCaptured {
     $startInfo.CreateNoWindow = $true
     $startInfo.RedirectStandardOutput = $true
     $startInfo.RedirectStandardError = $true
+    $startInfo.WorkingDirectory = (Resolve-Path -LiteralPath $WorkingDirectory).Path
 
     $process = [System.Diagnostics.Process]::new()
     $process.StartInfo = $startInfo
@@ -60,6 +65,120 @@ function Invoke-NativeCaptured {
     finally {
         $process.Dispose()
     }
+}
+
+function Get-InstalledPluginInfo {
+    $pluginOutput = (& codex plugin list 2>&1 | Out-String)
+    $pluginExitCode = $LASTEXITCODE
+    Assert-NativeSuccess -ExitCode $pluginExitCode -Operation 'codex plugin list'
+
+    $rows = @(
+        $pluginOutput -split "`r?`n" |
+            Where-Object { $_ -match '^\s*adeptus-necroneerium@personal\s+' }
+    )
+    if ($rows.Count -eq 0) {
+        return $null
+    }
+    if ($rows.Count -ne 1) {
+        throw "Expected at most one $PluginId row; found $($rows.Count)"
+    }
+
+    $row = $rows[0].TrimEnd()
+    if (
+        $row -notmatch (
+            '^\s*adeptus-necroneerium@personal\s+' +
+            'installed,\s*(enabled|disabled)\s+(\S+)\s+(.+?)\s*$'
+        )
+    ) {
+        throw 'The Adeptus plugin row could not be parsed'
+    }
+
+    [pscustomobject]@{
+        Row = $row
+        Enabled = $Matches[1] -ceq 'enabled'
+        Version = $Matches[2]
+        Root = $Matches[3].Trim()
+    }
+}
+
+function Invoke-PluginInstall {
+    Write-Host "[REPAIR] Installing $PluginId from its personal marketplace source..." -ForegroundColor Yellow
+    $installOutput = @(& codex plugin add $PluginId --json 2>&1)
+    $installExitCode = $LASTEXITCODE
+    if ($installOutput.Count -gt 0) {
+        $installOutput | ForEach-Object { [Console]::WriteLine($_) }
+    }
+    Assert-NativeSuccess -ExitCode $installExitCode -Operation 'codex plugin add'
+}
+
+function Sync-InstallablePackage {
+    param(
+        [Parameter(Mandatory)][string]$RepositoryRoot,
+        [Parameter(Mandatory)][string]$InstalledRoot
+    )
+
+    $sourceRoot = (Resolve-Path -LiteralPath $RepositoryRoot).Path.TrimEnd([char[]]'\/')
+    $destinationRoot = (Resolve-Path -LiteralPath $InstalledRoot).Path.TrimEnd([char[]]'\/')
+    if ([string]::Equals(
+        $sourceRoot,
+        $destinationRoot,
+        [System.StringComparison]::OrdinalIgnoreCase
+    )) {
+        Write-Pass 'Personal marketplace already points directly at this repository'
+        return
+    }
+
+    $separator = [System.IO.Path]::DirectorySeparatorChar
+    if (
+        $sourceRoot.StartsWith(
+            "$destinationRoot$separator",
+            [System.StringComparison]::OrdinalIgnoreCase
+        ) -or
+        $destinationRoot.StartsWith(
+            "$sourceRoot$separator",
+            [System.StringComparison]::OrdinalIgnoreCase
+        )
+    ) {
+        throw 'Refusing repair because repository and installed plugin paths overlap'
+    }
+
+    $installedManifestPath = Join-Path $destinationRoot '.codex-plugin\plugin.json'
+    if (-not (Test-Path -LiteralPath $installedManifestPath -PathType Leaf)) {
+        throw "Refusing repair because the installed manifest is missing: $installedManifestPath"
+    }
+    $installedManifest = Get-Content -LiteralPath $installedManifestPath -Raw |
+        ConvertFrom-Json
+    if ($installedManifest.name -cne $PluginName) {
+        throw (
+            "Refusing repair because $destinationRoot contains plugin " +
+            "'$($installedManifest.name)', not '$PluginName'"
+        )
+    }
+
+    foreach ($relativeDirectory in @('.codex-plugin', 'skills')) {
+        $source = Join-Path $sourceRoot $relativeDirectory
+        $destination = Join-Path $destinationRoot $relativeDirectory
+        if (-not (Test-Path -LiteralPath $source -PathType Container)) {
+            throw "Repository package directory is missing: $source"
+        }
+        if (Test-Path -LiteralPath $destination) {
+            Remove-Item -LiteralPath $destination -Recurse -Force
+        }
+        Copy-Item -LiteralPath $source -Destination $destination -Recurse -Force
+    }
+
+    foreach ($obsolete in @(
+        'hooks\hooks.json',
+        'hooks\adeptus_hook.py',
+        'scripts\adeptus_state.py'
+    )) {
+        $obsoletePath = Join-Path $destinationRoot $obsolete
+        if (Test-Path -LiteralPath $obsoletePath) {
+            Remove-Item -LiteralPath $obsoletePath -Force
+        }
+    }
+
+    Write-Pass "Synchronized the installable package into $destinationRoot"
 }
 
 function Get-NormalizedSha256 {
@@ -223,7 +342,8 @@ try {
     Write-Host 'Running repository tests...' -ForegroundColor Cyan
     $tests = Invoke-NativeCaptured `
         -FilePath 'py' `
-        -Arguments '-3 -m unittest discover -s tests -v'
+        -Arguments '-3 -m unittest discover -s tests -v' `
+        -WorkingDirectory $repositoryRoot
     $testOutput = (($tests.StdOut, $tests.StdErr) -join [Environment]::NewLine).TrimEnd()
     $testExitCode = $tests.ExitCode
     if ($testOutput.Length -gt 0) {
@@ -237,6 +357,23 @@ try {
     }
     else {
         Write-Pass 'Repository tests exited successfully'
+    }
+
+    if ($Repair) {
+        Write-Host ''
+        Write-Host 'Synchronizing installed plugin...' -ForegroundColor Cyan
+        $pluginInfo = Get-InstalledPluginInfo
+        if ($null -eq $pluginInfo) {
+            Invoke-PluginInstall
+            $pluginInfo = Get-InstalledPluginInfo
+        }
+        if ($null -eq $pluginInfo) {
+            throw "$PluginId did not appear after installation"
+        }
+        Sync-InstallablePackage `
+            -RepositoryRoot $repositoryRoot `
+            -InstalledRoot $pluginInfo.Root
+        Invoke-PluginInstall
     }
 
     Write-Host ''
