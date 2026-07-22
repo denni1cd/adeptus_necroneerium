@@ -3,7 +3,7 @@ param()
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
-$VerifierBuild = 'repository-synchronized-v3'
+$VerifierBuild = 'repository-synchronized-v4'
 $PluginName = 'adeptus-necroneerium'
 $Problems = [System.Collections.Generic.List[string]]::new()
 
@@ -25,6 +25,40 @@ function Assert-NativeSuccess {
     )
     if ($ExitCode -ne 0) {
         throw "$Operation failed with exit status $ExitCode"
+    }
+}
+
+function Invoke-NativeCaptured {
+    param(
+        [Parameter(Mandatory)][string]$FilePath,
+        [Parameter(Mandatory)][string]$Arguments
+    )
+
+    $startInfo = [System.Diagnostics.ProcessStartInfo]::new()
+    $startInfo.FileName = $FilePath
+    $startInfo.Arguments = $Arguments
+    $startInfo.UseShellExecute = $false
+    $startInfo.CreateNoWindow = $true
+    $startInfo.RedirectStandardOutput = $true
+    $startInfo.RedirectStandardError = $true
+
+    $process = [System.Diagnostics.Process]::new()
+    $process.StartInfo = $startInfo
+    try {
+        if (-not $process.Start()) {
+            throw "Could not start $FilePath"
+        }
+        $standardOutput = $process.StandardOutput.ReadToEndAsync()
+        $standardError = $process.StandardError.ReadToEndAsync()
+        $process.WaitForExit()
+        [pscustomobject]@{
+            ExitCode = $process.ExitCode
+            StdOut = $standardOutput.Result
+            StdErr = $standardError.Result
+        }
+    }
+    finally {
+        $process.Dispose()
     }
 }
 
@@ -187,8 +221,11 @@ try {
 
     Write-Host ''
     Write-Host 'Running repository tests...' -ForegroundColor Cyan
-    $testOutput = (& py -3 -m unittest discover -s tests -v 2>&1 | Out-String).TrimEnd()
-    $testExitCode = $LASTEXITCODE
+    $tests = Invoke-NativeCaptured `
+        -FilePath 'py' `
+        -Arguments '-3 -m unittest discover -s tests -v'
+    $testOutput = (($tests.StdOut, $tests.StdErr) -join [Environment]::NewLine).TrimEnd()
+    $testExitCode = $tests.ExitCode
     if ($testOutput.Length -gt 0) {
         [Console]::WriteLine($testOutput)
     }
