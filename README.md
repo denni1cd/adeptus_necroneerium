@@ -16,8 +16,8 @@ The registered skill name is `adeptus-necroneerium`; the repository and prompt a
 
 Codex is the orchestrator. Role names identify responsibilities and do not require separate personalities, roleplay, or agent contexts.
 
-- **One Lich** reads the complete request and drafts the whole-project strategic topology, acceptance coverage, integration seams, and Vampire scope graph.
-- **Many Vampires** may each draft one coherent tactical subsystem, including contracts, tests, and Skeleton assignments.
+- **One Lich** reads the complete request, drafts the whole-project strategic topology, and creates or revises the actual package/module structure, public entry points, and major integration seams.
+- **Many Vampires** may each own one coherent tactical subsystem and write its actual signatures, types, schemas, exceptions, docstrings, and test skeletons.
 - **Many Skeletons** may each implement one bounded unit, usually a file and all relevant stubs or a tightly coupled implementation-and-test unit.
 - **Shade** reviews Skeleton items, integrated Vampire scopes, phase gates, and the final project; routes failures backward; and may recall retired Vampires when direct evidence requires it.
 
@@ -30,22 +30,6 @@ Lich and Vampire outputs guide downstream work but are not immutable requirement
 Material changes must be propagated to affected contracts, tests, dependencies, siblings, and validation state. User requirements, explicit acceptance criteria, safety constraints, and phase gates remain binding.
 
 A normal draft revision is not a retry. Shade rejection of a critical judged finding begins its isolated retry sequence.
-
-## Mechanical completion guard
-
-The plugin packages a session-scoped completion ledger and [Codex Stop hook](https://learn.chatgpt.com/docs/hooks). Explicit invocation activates the guard. The hook adds the ledger and state-tool paths to Codex context before target writes and rejects a final response until one of these conditions is mechanically evidenced:
-
-- **PASS:** every binding acceptance item and required phase gate is passed with direct evidence, with no unresolved critical finding or open blocker;
-- **BLOCKED:** a recorded open external blocker covers every unfinished item and unresolved critical finding, and names the narrowest unblock action;
-- **FAIL:** the same stable critical finding has evidenced rejections at attempt 0, retry 1, and retry 2.
-
-An ordinary Codex session creates no ledger and its Stop event is untouched. Active state lives under the plugin data directory, not in the target repository. A successful terminal check seals that session ledger. The user can explicitly cancel a run with `@adeptus-necroneerium abort`; disabling the hook through `/hooks` is the administrative escape hatch.
-
-Installing or enabling the plugin does not automatically trust its executable hooks. After each new or changed hook definition, open `/hooks`, review both plugin-bundled hooks, and explicitly trust them before starting the test in a new thread. Codex skips an untrusted hook, so an invocation is not proven active unless the injected context names the session ledger and state tool. A successful activation also writes `activation-receipt.json` beside the session ledger in the plugin data directory for diagnosis outside the target.
-
-Before an expensive run, submit exactly `@adeptus-necroneerium probe` in a disposable fresh thread. A working `UserPromptSubmit` hook injects `ADEPTUS COMPLETION GUARD PROBE PASSED`, writes a probe receipt in plugin data, and deliberately leaves the completion ledger and Stop guard inactive. If that message is absent, inspect `/hooks` rather than starting product work.
-
-The hook is a lifecycle guard, not a substitute for implementation judgment. Codex still has to construct the complete acceptance inventory, update it honestly, execute work, and gather direct evidence. Hook source should be reviewed before enabling the plugin, as with any executable repository content.
 
 ## Forward construction and backward review
 
@@ -87,9 +71,8 @@ Do not save tokens by omitting necessary code, tests, or verification. Save them
 - `docs/charter.md`: purpose, boundaries, and success criteria.
 - `docs/skill-outline.md`: design reference for the nested lifecycle.
 - `.codex-plugin/plugin.json`: plugin manifest.
-- `hooks/hooks.json` and `hooks/adeptus_hook.py`: opt-in activation and terminal enforcement.
-- `scripts/adeptus_state.py`: atomic ledger updates and terminal-policy validation.
-- `tests/test_completion_guard.py`: executable policy and hook tests.
+- `tests/test_skill_contract.py`: regression checks for the lightweight, code-producing hierarchy.
+- `verify-adeptus-update.ps1`: repository-derived Windows installation verifier.
 
 ## Development verification
 
@@ -97,7 +80,7 @@ From the repository root, run:
 
 ```text
 python3 -m unittest discover -s tests -v
-python3 -m compileall -q hooks scripts tests
+python3 -m compileall -q tests
 ```
 
 On Windows, `py -3` may replace `python3`. Plugin maintainers should also run the current plugin and skill validators supplied with their Codex development environment.

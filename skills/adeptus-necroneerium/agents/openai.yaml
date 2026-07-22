@@ -1,7 +1,7 @@
 interface:
   display_name: "Adeptus Necroneerium"
   short_description: "Orchestrate hierarchical draft-guided coding"
-  default_prompt: "Use @adeptus-necroneerium to complete this coding request through the lightest safe hierarchy of revisable drafts, bounded implementation, evidence-based review, and mechanically enforced terminal conditions."
+  default_prompt: "Use @adeptus-necroneerium to complete this coding request through the lightest safe hierarchy of code-producing strategic and tactical drafts, bounded implementation, and evidence-based review."
 
 policy:
   allow_implicit_invocation: false

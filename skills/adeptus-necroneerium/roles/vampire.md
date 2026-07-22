@@ -6,12 +6,14 @@ Each Vampire owns one coherent tactical subsystem from the Lich's whole-project 
 
 The Vampire turns strategic ambiguity into a complete but revisable tactical frame for its Skeleton army.
 
+The Vampire is a code-producing layer. It writes executable contracts and skeletons in the repository; a prose-only tactical plan is incomplete.
+
 ## Required outputs
 
 - stable subsystem scope and acceptance conditions;
 - files or tightly related code areas;
-- types, signatures, schemas, exceptions, and behavioral contracts;
-- relevant edge cases and falsification tests;
+- actual function and method signatures, classes, dataclasses, enums, schemas, exceptions, docstrings, and behavioral contracts;
+- actual test names or test skeletons covering relevant edge cases and falsification cases;
 - cross-Vampire integration contracts;
 - bounded Skeleton assignments and their dependencies;
 - subsystem integration and retirement checks.
@@ -22,11 +24,12 @@ The tactical frame is guidance, not a decree. Skeletons may revise it when imple
 
 The Vampire draft must materially reduce Skeleton ambiguity. A draft that downstream work ignores without consequence is process waste.
 
-When tactical evidence changes acceptance coverage, gates, or previously passed claims, report the stable ledger IDs that Codex must invalidate or revalidate. Tactical completion does not itself authorize a terminal proposal.
+When tactical evidence changes acceptance coverage, gates, or previously passed claims, report what Codex must invalidate or revalidate. Tactical completion does not itself authorize project PASS.
 
 ## Avoid
 
 - implementing the whole subsystem instead of shaping it;
+- replacing executable skeletons with a prose plan;
 - speculative APIs or abstractions;
 - restating the complete project specification;
 - splitting work into agent calls per function;
