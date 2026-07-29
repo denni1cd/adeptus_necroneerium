@@ -1,84 +1,120 @@
+![Adeptus Necroneerium - progressive code construction](docs/assets/adeptus-necroneerium-banner.webp)
+
 # Adeptus Necroneerium
 
-Adeptus Necroneerium is a strictly on-demand Codex plugin and coding skill for completing substantial software requests through hierarchical, revisable code drafts and evidence-based review.
+> Progressive code construction for substantial software work: shape the architecture, define executable contracts, build bounded units, and verify the real result.
 
-It exists to test whether a structured run can deliver better quality, evolvability, review honesty, and total token efficiency than plain Codex—especially by reducing architectural drift, rework, false PASS claims, and user reprompting.
+Adeptus Necroneerium is a strictly opt-in Codex plugin and coding skill for work that is too large, interconnected, or evolution-heavy for a reliable one-shot implementation.
 
-The canonical project doctrine and hierarchy diagram are in [the manifesto](docs/manifesto.md).
+It gives Codex a lightweight hierarchy of responsibilities—**Lich, Vampire, Skeleton, and Shade**—but keeps every layer pointed at the codebase. Strategic work shapes real structure. Tactical work creates executable contracts and test skeletons. Implementation completes bounded units. Review verifies behavior and routes defects back to the lowest responsible level.
+
+**The goal is not more agents or more ceremony. The goal is better software with less drift, rework, false confidence, and user reprompting.**
+
+## Why this exists
+
+Large coding tasks often fail in predictable ways: architecture is decided before the whole request is understood, plans never become useful code, implementation drifts across subsystems, and passing tests are mistaken for proof that the actual product works.
+
+Adeptus Necroneerium tests a different model:
+
+| Common failure mode | Adeptus response |
+| --- | --- |
+| Planning is detached from implementation | Higher layers produce code structure, contracts, schemas, and tests |
+| Early architecture becomes an immutable decree | Lich and Vampire outputs are revisable drafts |
+| A local success is reported as project completion | Every binding acceptance item must be directly verified |
+| A defect causes a broad restart | Shade routes repair to the lowest responsible scope |
+| Context is repeatedly reloaded | Each responsibility receives only the context it needs |
+| Process overhead overwhelms small tasks | Direct and Tactical modes collapse unnecessary layers |
+
+The governing principle is simple:
+
+> **Working code over comprehensive agent artifacts.**
+
+## How it works
+
+![Lich, Vampire, Skeleton, and Shade workflow](docs/assets/adeptus-workflow.webp)
+
+| Responsibility | Resolution | What it contributes |
+| --- | --- | --- |
+| **Lich** | Whole project | Reads the complete request, shapes repository and module topology, establishes public seams, and defines coherent subsystem scopes |
+| **Vampire** | One subsystem | Writes signatures, types, schemas, exceptions, docstrings, test skeletons, and acceptance-to-evidence mappings |
+| **Skeleton** | Bounded unit | Implements cohesive production behavior and the tests needed to validate it |
+| **Shade** | Every gate | Independently reviews observed behavior, rejects unverified claims, routes repairs backward, and may recall a retired Vampire |
+
+Codex remains the orchestrator throughout. The role names describe responsibilities; they do not require roleplay, separate personalities, or an agent call for every file.
+
+The ownership model is hierarchical, but real software dependencies may form a DAG. Codex schedules dependency-ready work, preserves unaffected passed scopes, and reopens only the branch invalidated by new evidence.
+
+## Three operating modes
+
+Adeptus chooses the lightest safe workflow **after explicit invocation**:
+
+| Mode | Best fit | Shape |
+| --- | --- | --- |
+| **Direct** | Tiny or mechanical changes | Inspect → implement → test → verify |
+| **Tactical** | A bounded feature with meaningful contracts | One Vampire → bounded Skeleton work → Shade gates |
+| **Adeptus** | Large, phased, multi-subsystem, or structurally ambiguous work | One Lich → multiple Vampire scopes → Skeleton armies → phase and project review |
+
+Small work should not pay the cost of a full hierarchy. Large work should spend structure only where it can prevent rework, missed requirements, architectural drift, or another user correction loop.
+
+## What makes the review different
+
+Shade does not merely ask whether generated unit tests passed. It checks the boundary being claimed:
+
+- public API, CLI, UI, persistence, restart, and process behavior where relevant;
+- shared state across interfaces and whether read-only operations accidentally mutate it;
+- background work that must survive beyond the request or command that started it;
+- README commands executed from their documented working directory;
+- every binding acceptance item classified as `verified`, `failed`, or `unverified`.
+
+`failed` and `unverified` both prohibit project PASS.
+
+When review finds a critical defect, the repair is routed to the lowest responsible level—Skeleton implementation, Vampire contract, Lich topology, or an actual missing user requirement. Each stable finding receives its own retry history, and unrelated passed work remains intact.
 
 ## Invocation
 
-The skill must never activate implicitly. Use it only when the user explicitly requests Adeptus Necroneerium, writes `adeptus_necroneerium`, or invokes `@adeptus-necroneerium` (the native `$adeptus-necroneerium` form is also recognized).
+The skill never activates implicitly. Invoke it by name:
 
-The registered skill name is `adeptus-necroneerium`; the repository and prompt alias may use `adeptus_necroneerium`.
+```text
+Use @adeptus-necroneerium to implement this request:
 
-## Core model
+<complete software request, constraints, and acceptance criteria>
+```
 
-Codex is the orchestrator. Role names identify responsibilities and do not require separate personalities, roleplay, or agent contexts.
+The registered skill name is `adeptus-necroneerium`. The repository and prompt alias may also use `adeptus_necroneerium`; the native `$adeptus-necroneerium` form is equivalent.
 
-- **One Lich** reads the complete request, drafts the whole-project strategic topology, and creates or revises the actual package/module structure, public entry points, and major integration seams.
-- **Many Vampires** may each own one coherent tactical subsystem, write its actual signatures, types, schemas, exceptions, docstrings, and test skeletons, and map binding criteria to executable boundary checks.
-- **Many Skeletons** may each implement one bounded unit, usually a file and all relevant stubs or a tightly coupled implementation-and-test unit.
-- **Shade** reviews Skeleton items, integrated Vampire scopes, phase gates, and the final project; routes failures backward; and may recall retired Vampires when direct evidence requires it.
+## Development and installation
 
-Responsibility forms a hierarchy. Software dependencies may form a DAG that Codex schedules from the current drafts.
+This repository is a Codex plugin package. After registering it in a personal Codex marketplace, install or refresh it with:
 
-## Drafts, not decrees
+```text
+codex plugin add adeptus-necroneerium@personal --json
+```
 
-Lich and Vampire outputs guide downstream work but are not immutable requirements. Lower responsibilities may revise them without routine parent approval when implementation evidence supports a safer, simpler, or more correct design.
+On Windows, the repository verifier can synchronize a checked-out package into the registered plugin and validate the result:
 
-Material changes must be propagated to affected contracts, tests, dependencies, siblings, and validation state. User requirements, explicit acceptance criteria, safety constraints, and phase gates remain binding.
+```powershell
+.\verify-adeptus-update.ps1 -Repair
+```
 
-A normal draft revision is not a retry. Shade rejection of a critical judged finding begins its isolated retry sequence.
+Without `-Repair`, the verifier is read-only and reports repository, test, and installation drift.
 
-## Forward construction and backward review
+## Repository map
 
-Codex normally activates one dependency-ready Vampire at a time. Its Skeleton army implements the tactical draft, Shade reviews the items and integrated subsystem, and Codex retires the Vampire after PASS before activating the next ready scope.
-
-Passing a Skeleton, Vampire, milestone, or phase is intermediate progress when requested work remains. Codex must continue without asking a parent responsibility for an already-known next action.
-
-Shade routes critical findings to the lowest responsible level:
-
-- Skeleton implementation;
-- Vampire tactical contract or subsystem design;
-- Lich strategic topology or decomposition;
-- user requirement or external dependency.
-
-Retired Vampires are inactive, not sealed. Shade may recall one for a verified tactical or integration defect; Lich may require recall after a strategic revision. Recalls preserve scope identity, finding identity, retry state, and unaffected sibling work.
-
-Vampire acceptance design must cover interactions when public interfaces share state or process ownership, confirm read-only operations do not mutate state, and verify background work beyond the lifetime of the initiating command or request. At phase and project gates, Shade independently classifies each binding item as `verified`, `failed`, or `unverified`; any failed or unverified binding item prohibits PASS.
-
-## Retry rule
-
-Initial judged work is attempt 0. The first Shade rejection triggers retry 1. Rejection of retry 1 triggers retry 2. Rejection after retry 2 for the same finding terminates the entire project.
-
-Counters are isolated by stable finding and scope path. They are never pooled across siblings, Vampires, phases, test suites, or the project. An upstream repair reruns only affected descendants and integration seams.
-
-## Cost discipline
-
-> Working code over comprehensive agent artifacts.
-
-Quality and total token efficiency matter more than speed. The hierarchy is justified only when it reduces rework, missed requirements, drift, false claims, or user intervention.
-
-Use Direct or Tactical mode for smaller tasks. In Adeptus mode, keep Lich and Vampire drafts compact, pass only relevant context downward, combine tiny Skeleton assignments, keep Shade reports evidence-dense, and preserve unaffected passed work.
-
-Do not save tokens by omitting necessary code, tests, or verification. Save them by eliminating repeated interpretation, full-context reloads, ceremonial reports, needless handoffs, and broad reruns.
-
-## Repository
-
-- `skills/adeptus-necroneerium/SKILL.md`: installed skill entrypoint and complete operating rules.
-- `skills/adeptus-necroneerium/roles/`: focused role references.
-- `skills/adeptus-necroneerium/templates/spec.md`: optional working-state template for substantial runs.
-- `docs/manifesto.md`: project doctrine and hierarchy diagram.
-- `docs/charter.md`: purpose, boundaries, and success criteria.
-- `docs/skill-outline.md`: design reference for the nested lifecycle.
-- `.codex-plugin/plugin.json`: plugin manifest.
-- `tests/test_skill_contract.py`: regression checks for the lightweight, code-producing hierarchy.
-- `verify-adeptus-update.ps1`: repository-derived Windows installation verifier.
+| Path | Purpose |
+| --- | --- |
+| `skills/adeptus-necroneerium/SKILL.md` | Installed skill entrypoint and complete operating rules |
+| `skills/adeptus-necroneerium/roles/` | Focused Lich, Vampire, and Shade responsibilities |
+| `skills/adeptus-necroneerium/templates/spec.md` | Optional compact working-state template for substantial runs |
+| `docs/manifesto.md` | Canonical doctrine and hierarchy |
+| `docs/charter.md` | Purpose, boundaries, and evaluation criteria |
+| `docs/skill-outline.md` | Detailed lifecycle and repair model |
+| `.codex-plugin/plugin.json` | Plugin manifest |
+| `tests/test_skill_contract.py` | Regression checks for the lightweight, code-producing hierarchy |
+| `verify-adeptus-update.ps1` | Repository-derived Windows installation verifier |
 
 ## Development verification
 
-From the repository root, run:
+From the repository root:
 
 ```text
 python3 -m unittest discover -s tests -v
@@ -87,14 +123,10 @@ python3 -m compileall -q tests
 
 On Windows, `py -3` may replace `python3`. Plugin maintainers should also run the current plugin and skill validators supplied with their Codex development environment.
 
-To synchronize the checked-out package into the registered personal plugin and verify the result in one pass:
+## Project status
 
-```powershell
-.\verify-adeptus-update.ps1 -Repair
-```
+Adeptus Necroneerium is an active experiment, not a claim that hierarchy automatically improves coding. It must earn its cost through practical results: stronger acceptance coverage, better evolvability, fewer false PASS claims, less rework, and fewer user interventions at a reasonable total token cost.
 
-Without `-Repair`, the verifier is read-only and reports any repository or installation drift.
+If controlled testing cannot show a meaningful advantage over plain Codex for any useful class of work, the correct outcome is to simplify or abandon the process.
 
-## Success criterion
-
-Adeptus Necroneerium matters only if controlled practical tests show a meaningful advantage over plain Codex. If it cannot improve delivered quality, evolvability, review accuracy, or total interaction cost, simplify or abandon it.
+Read the [manifesto](docs/manifesto.md) for the doctrine, the [charter](docs/charter.md) for the evaluation standard, or the [complete skill](skills/adeptus-necroneerium/SKILL.md) for operational details.
